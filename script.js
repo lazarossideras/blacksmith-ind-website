@@ -450,7 +450,7 @@ initHiwCarousel();
 
 // ===== LIVE DASHBOARD (static — no animation) =====
 
-// ===== STATIC GLOBE (render once, redraw only on drag) =====
+// ===== INTERACTIVE GLOBE (pauses when off-screen) =====
 function initGlobe() {
     const canvas = document.getElementById('globe-canvas');
     if (!canvas) return;
@@ -462,29 +462,38 @@ function initGlobe() {
     const DOT_COLOR = 'rgba(123, 97, 255, ALPHA)';
     const ARC_COLOR = 'rgba(168, 85, 247, 0.4)';
     const MARKER_COLOR = 'rgba(200, 171, 255, 1)';
+    const AUTO_ROTATE_SPEED = 0.002;
 
     const MARKERS = [
-        { lat: -33.87, lng: 151.21, label: 'Australia' },
-        { lat: 45.42, lng: -75.69, label: 'Canada' },
-        { lat: 40.71, lng: -74.01, label: 'USA' },
-        { lat: 35.17, lng: 33.36, label: 'Cyprus' },
-        { lat: 37.98, lng: 23.73, label: 'Greece' },
-        { lat: 51.51, lng: -0.13, label: 'UK' },
+        { lat: 37.78, lng: -122.42, label: 'San Francisco' },
+        { lat: 51.51, lng: -0.13, label: 'London' },
+        { lat: 35.68, lng: 139.69, label: 'Tokyo' },
+        { lat: -33.87, lng: 151.21, label: 'Sydney' },
+        { lat: 1.35, lng: 103.82, label: 'Singapore' },
+        { lat: 55.76, lng: 37.62, label: 'Moscow' },
+        { lat: -23.55, lng: -46.63, label: 'São Paulo' },
+        { lat: 19.43, lng: -99.13, label: 'Mexico City' },
+        { lat: 28.61, lng: 77.21, label: 'Delhi' },
+        { lat: 37.98, lng: 23.73, label: 'Athens' },
     ];
 
     const CONNECTIONS = [
-        { from: [37.98, 23.73], to: [51.51, -0.13] },
-        { from: [37.98, 23.73], to: [35.17, 33.36] },
-        { from: [51.51, -0.13], to: [40.71, -74.01] },
-        { from: [40.71, -74.01], to: [45.42, -75.69] },
-        { from: [37.98, 23.73], to: [-33.87, 151.21] },
-        { from: [51.51, -0.13], to: [-33.87, 151.21] },
-        { from: [35.17, 33.36], to: [-33.87, 151.21] },
+        { from: [37.78, -122.42], to: [51.51, -0.13] },
+        { from: [51.51, -0.13], to: [35.68, 139.69] },
+        { from: [35.68, 139.69], to: [-33.87, 151.21] },
+        { from: [37.78, -122.42], to: [1.35, 103.82] },
+        { from: [51.51, -0.13], to: [28.61, 77.21] },
+        { from: [37.78, -122.42], to: [-23.55, -46.63] },
+        { from: [1.35, 103.82], to: [-33.87, 151.21] },
+        { from: [28.61, 77.21], to: [37.98, 23.73] },
+        { from: [51.51, -0.13], to: [37.98, 23.73] },
     ];
 
     // State
     let rotY = 0.4;
     let rotX = 0.3;
+    let time = 0;
+    let animId = 0;
     const drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
 
     // Generate dots (Fibonacci sphere) — fewer on mobile for performance
@@ -527,7 +536,7 @@ function initGlobe() {
         return [x * scale + cx, y * scale + cy, z];
     }
 
-    // Single-frame draw (no animation loop)
+    // Draw loop
     function draw() {
         const dpr = window.devicePixelRatio || 1;
         const w = canvas.clientWidth;
@@ -540,6 +549,9 @@ function initGlobe() {
         const cy = h / 2;
         const radius = Math.min(w, h) * 0.38;
         const fov = 600;
+
+        if (!drag.active) rotY += AUTO_ROTATE_SPEED;
+        time += 0.015;
 
         ctx.clearRect(0, 0, w, h);
 
@@ -576,7 +588,7 @@ function initGlobe() {
             ctx.fill();
         }
 
-        // Draw connections (static arcs)
+        // Draw connections
         for (const conn of CONNECTIONS) {
             const [lat1, lng1] = conn.from;
             const [lat2, lng2] = conn.to;
@@ -612,9 +624,19 @@ function initGlobe() {
             ctx.strokeStyle = ARC_COLOR;
             ctx.lineWidth = 1.2;
             ctx.stroke();
+
+            // Traveling dot
+            const t = (Math.sin(time * 1.2 + lat1 * 0.1) + 1) / 2;
+            const tx = (1 - t) * (1 - t) * sx1 + 2 * (1 - t) * t * scx + t * t * sx2;
+            const ty = (1 - t) * (1 - t) * sy1 + 2 * (1 - t) * t * scy + t * t * sy2;
+
+            ctx.beginPath();
+            ctx.arc(tx, ty, 2, 0, Math.PI * 2);
+            ctx.fillStyle = MARKER_COLOR;
+            ctx.fill();
         }
 
-        // Draw country markers
+        // Draw markers
         for (const marker of MARKERS) {
             let [x, y, z] = latLngToXYZ(marker.lat, marker.lng, radius);
             [x, y, z] = rotateXAxis(x, y, z, rotX);
@@ -624,10 +646,11 @@ function initGlobe() {
 
             const [sx, sy] = project(x, y, z, cx, cy, fov);
 
-            // Static glow ring
+            // Pulse ring
+            const pulse = Math.sin(time * 2 + marker.lat) * 0.5 + 0.5;
             ctx.beginPath();
-            ctx.arc(sx, sy, 6, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(200, 171, 255, 0.25)';
+            ctx.arc(sx, sy, 4 + pulse * 4, 0, Math.PI * 2);
+            ctx.strokeStyle = MARKER_COLOR.replace('1)', `${(0.2 + pulse * 0.15).toFixed(2)})`);
             ctx.lineWidth = 1;
             ctx.stroke();
 
@@ -644,12 +667,11 @@ function initGlobe() {
                 ctx.fillText(marker.label, sx + 8, sy + 3);
             }
         }
+
+        animId = requestAnimationFrame(draw);
     }
 
-    // Render once on load
-    draw();
-
-    // Re-draw only on drag (no continuous loop)
+    // Pointer drag handlers
     canvas.addEventListener('pointerdown', (e) => {
         drag.active = true;
         drag.startX = e.clientX;
@@ -665,11 +687,16 @@ function initGlobe() {
         const dy = e.clientY - drag.startY;
         rotY = drag.startRotY + dx * 0.005;
         rotX = Math.max(-1, Math.min(1, drag.startRotX + dy * 0.005));
-        draw();
     });
 
     canvas.addEventListener('pointerup', () => { drag.active = false; });
     canvas.addEventListener('pointercancel', () => { drag.active = false; });
+
+    // Only run when visible
+    createVisibilityLoop(canvas,
+        () => { animId = requestAnimationFrame(draw); },
+        () => { cancelAnimationFrame(animId); }
+    );
 }
 
 initGlobe();

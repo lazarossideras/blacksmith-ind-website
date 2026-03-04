@@ -1362,14 +1362,6 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     pointer-events: none;
 }
 
-.sys-card:hover::before {
-    opacity: 1;
-}
-
-.sys-card:hover {
-    border-color: rgba(123, 97, 255, 0.2);
-    box-shadow: 0 0 24px rgba(123, 97, 255, 0.08), 0 0 48px rgba(168, 85, 247, 0.04);
-}
 
 /* Top-row cards: visual + text stacked */
 .sys-card--2col {
@@ -1428,9 +1420,6 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     transition: background 0.2s ease;
 }
 
-.sys-card-tags span:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
 
 /* ---- Card 1: Autonomous Employees — pulsing robot ---- */
 .sys-visual-robot {
