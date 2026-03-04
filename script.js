@@ -1,9 +1,34 @@
-import { Application } from 'https://esm.sh/@splinetool/runtime';
+// ===== PERFORMANCE HELPERS =====
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-// Load Spline 3D scene
-const canvas = document.getElementById('canvas3d');
-const app = new Application(canvas);
-app.load('https://prod.spline.design/PJGgP8Fu-UTvdRDo/scene.splinecode');
+// Reusable visibility observer — pauses/resumes animation loops when off-screen
+function createVisibilityLoop(element, startFn, stopFn) {
+    let running = false;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !running) {
+                running = true;
+                startFn();
+            } else if (!entry.isIntersecting && running) {
+                running = false;
+                stopFn();
+            }
+        });
+    }, { rootMargin: '100px' });
+    observer.observe(element);
+}
+
+// ===== LAZY-LOAD SPLINE 3D SCENE =====
+const splineCanvas = document.getElementById('canvas3d');
+if (splineCanvas) {
+    // Defer Spline load so the rest of the page renders first
+    requestIdleCallback(() => {
+        import('https://esm.sh/@splinetool/runtime').then(({ Application }) => {
+            const app = new Application(splineCanvas);
+            app.load('https://prod.spline.design/PJGgP8Fu-UTvdRDo/scene.splinecode');
+        });
+    }, { timeout: 2000 });
+}
 
 // Tubelight nav
 const navLinks = document.querySelectorAll('[data-nav]');
@@ -402,7 +427,7 @@ function initHiwCarousel() {
 
 initHiwCarousel();
 
-// ===== LIVE DASHBOARD ANIMATION =====
+// ===== LIVE DASHBOARD ANIMATION (pauses when off-screen) =====
 function initLiveDashboard() {
     const panel = document.querySelector('.sys-card-panel');
     if (!panel) return;
@@ -439,15 +464,11 @@ function initLiveDashboard() {
         });
     }
 
-    // Pick new targets every 6s so drift direction changes
-    setInterval(pickNewTargets, 6000);
-    // Stagger initial target pick
-    setTimeout(pickNewTargets, 2000);
-
+    let targetInterval;
+    let animId;
     let lastText = 0;
 
     function tick(now) {
-        // Lerp all values toward targets
         tasks = lerp(tasks, tasksTarget, ease);
         uptime = lerp(uptime, uptimeTarget, ease * 0.5);
         errors = lerp(errors, errorsTarget, ease * 0.3);
@@ -470,18 +491,36 @@ function initLiveDashboard() {
             statChanges[2].textContent = (errors <= 3 ? '-' : '+') + Math.abs(Math.round((errors - 5) / 5 * 100)) + '%';
         }
 
-        requestAnimationFrame(tick);
+        animId = requestAnimationFrame(tick);
     }
 
-    requestAnimationFrame(tick);
+    function start() {
+        setTimeout(pickNewTargets, 2000);
+        targetInterval = setInterval(pickNewTargets, 6000);
+        animId = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+        clearInterval(targetInterval);
+        cancelAnimationFrame(animId);
+    }
+
+    createVisibilityLoop(panel, start, stop);
 }
 
 initLiveDashboard();
 
-// ===== INTERACTIVE GLOBE =====
+// ===== INTERACTIVE GLOBE (disabled on mobile, pauses when off-screen) =====
 function initGlobe() {
     const canvas = document.getElementById('globe-canvas');
     if (!canvas) return;
+
+    // Kill globe entirely on mobile
+    if (isMobile) {
+        canvas.style.display = 'none';
+        return;
+    }
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -720,7 +759,11 @@ function initGlobe() {
     canvas.addEventListener('pointerup', () => { drag.active = false; });
     canvas.addEventListener('pointercancel', () => { drag.active = false; });
 
-    animId = requestAnimationFrame(draw);
+    // Only run when visible
+    createVisibilityLoop(canvas,
+        () => { animId = requestAnimationFrame(draw); },
+        () => { cancelAnimationFrame(animId); }
+    );
 }
 
 initGlobe();

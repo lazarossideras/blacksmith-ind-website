@@ -148,6 +148,7 @@ a {
     top: -2px;
     pointer-events: none;
     transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: left;
 }
 
 .lamp-bar {
@@ -497,6 +498,7 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     white-space: nowrap;
     animation: scroll 60s linear infinite;
     width: max-content;
+    will-change: transform;
 }
 
 .ticker-item {
@@ -692,6 +694,7 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     opacity: 0.6;
     transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1),
                 opacity 0.7s ease;
+    will-change: transform, opacity;
 }
 
 .cs-card--active {
@@ -3132,8 +3135,9 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
         font-size: 12px;
     }
 
-    #globe-canvas {
-        max-width: 420px;
+    #globe-canvas,
+    .cta-globe-wrap {
+        display: none;
     }
 
     /* Footer mobile */
