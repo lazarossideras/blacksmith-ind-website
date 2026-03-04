@@ -450,7 +450,7 @@ initHiwCarousel();
 
 // ===== LIVE DASHBOARD (static — no animation) =====
 
-// ===== INTERACTIVE GLOBE (pauses when off-screen) =====
+// ===== INTERACTIVE GLOBE (based on shadcn interactive-globe component) =====
 function initGlobe() {
     const canvas = document.getElementById('globe-canvas');
     if (!canvas) return;
@@ -458,9 +458,9 @@ function initGlobe() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Config
+    // Config — purple palette matching site theme
     const DOT_COLOR = 'rgba(123, 97, 255, ALPHA)';
-    const ARC_COLOR = 'rgba(168, 85, 247, 0.4)';
+    const ARC_COLOR = 'rgba(168, 85, 247, 0.5)';
     const MARKER_COLOR = 'rgba(200, 171, 255, 1)';
     const AUTO_ROTATE_SPEED = 0.002;
 
@@ -474,7 +474,7 @@ function initGlobe() {
         { lat: -23.55, lng: -46.63, label: 'São Paulo' },
         { lat: 19.43, lng: -99.13, label: 'Mexico City' },
         { lat: 28.61, lng: 77.21, label: 'Delhi' },
-        { lat: 37.98, lng: 23.73, label: 'Athens' },
+        { lat: 36.19, lng: 44.01, label: 'Erbil' },
     ];
 
     const CONNECTIONS = [
@@ -485,50 +485,31 @@ function initGlobe() {
         { from: [51.51, -0.13], to: [28.61, 77.21] },
         { from: [37.78, -122.42], to: [-23.55, -46.63] },
         { from: [1.35, 103.82], to: [-33.87, 151.21] },
-        { from: [28.61, 77.21], to: [37.98, 23.73] },
-        { from: [51.51, -0.13], to: [37.98, 23.73] },
+        { from: [28.61, 77.21], to: [36.19, 44.01] },
+        { from: [51.51, -0.13], to: [36.19, 44.01] },
     ];
 
-    // State
-    let rotY = 0.4;
-    let rotX = 0.3;
-    let time = 0;
-    let animId = 0;
-    const drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
-
-    // Generate dots (Fibonacci sphere) — fewer on mobile for performance
-    const dots = [];
-    const NUM_DOTS = isMobile ? 500 : 1200;
-    const goldenRatio = (1 + Math.sqrt(5)) / 2;
-    for (let i = 0; i < NUM_DOTS; i++) {
-        const theta = (2 * Math.PI * i) / goldenRatio;
-        const phi = Math.acos(1 - (2 * (i + 0.5)) / NUM_DOTS);
-        dots.push([
-            Math.cos(theta) * Math.sin(phi),
-            Math.cos(phi),
-            Math.sin(theta) * Math.sin(phi),
-        ]);
-    }
-
-    // Math helpers
-    function latLngToXYZ(lat, lng, r) {
+    // Math helpers (matching reference component exactly)
+    function latLngToXYZ(lat, lng, radius) {
         const phi = ((90 - lat) * Math.PI) / 180;
         const theta = ((lng + 180) * Math.PI) / 180;
         return [
-            -(r * Math.sin(phi) * Math.cos(theta)),
-            r * Math.cos(phi),
-            r * Math.sin(phi) * Math.sin(theta),
+            -(radius * Math.sin(phi) * Math.cos(theta)),
+            radius * Math.cos(phi),
+            radius * Math.sin(phi) * Math.sin(theta),
         ];
     }
 
-    function rotateYAxis(x, y, z, a) {
-        const c = Math.cos(a), s = Math.sin(a);
-        return [x * c + z * s, y, -x * s + z * c];
+    function rotateYAxis(x, y, z, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        return [x * cos + z * sin, y, -x * sin + z * cos];
     }
 
-    function rotateXAxis(x, y, z, a) {
-        const c = Math.cos(a), s = Math.sin(a);
-        return [x, y * c - z * s, y * s + z * c];
+    function rotateXAxis(x, y, z, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        return [x, y * cos - z * sin, y * sin + z * cos];
     }
 
     function project(x, y, z, cx, cy, fov) {
@@ -536,8 +517,32 @@ function initGlobe() {
         return [x * scale + cx, y * scale + cy, z];
     }
 
-    // Draw loop
+    // State
+    let rotationY = 0.4;
+    let rotationX = 0.3;
+    let time = 0;
+    let animId = 0;
+    let running = false;
+    const drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
+
+    // Generate Fibonacci sphere dots
+    const globeDots = [];
+    const NUM_DOTS = isMobile ? 500 : 1200;
+    const goldenRatio = (1 + Math.sqrt(5)) / 2;
+    for (let i = 0; i < NUM_DOTS; i++) {
+        const theta = (2 * Math.PI * i) / goldenRatio;
+        const phi = Math.acos(1 - (2 * (i + 0.5)) / NUM_DOTS);
+        globeDots.push([
+            Math.cos(theta) * Math.sin(phi),
+            Math.cos(phi),
+            Math.sin(theta) * Math.sin(phi),
+        ]);
+    }
+
+    // Draw frame
     function draw() {
+        if (!running) return;
+
         const dpr = window.devicePixelRatio || 1;
         const w = canvas.clientWidth;
         const h = canvas.clientHeight;
@@ -550,8 +555,14 @@ function initGlobe() {
         const radius = Math.min(w, h) * 0.38;
         const fov = 600;
 
-        if (!drag.active) rotY += AUTO_ROTATE_SPEED;
+        // Auto rotate
+        if (!drag.active) {
+            rotationY += AUTO_ROTATE_SPEED;
+        }
         time += 0.015;
+
+        const ry = rotationY;
+        const rx = rotationX;
 
         ctx.clearRect(0, 0, w, h);
 
@@ -570,13 +581,16 @@ function initGlobe() {
         ctx.stroke();
 
         // Draw dots
-        for (let i = 0; i < dots.length; i++) {
-            let [x, y, z] = dots[i];
-            x *= radius; y *= radius; z *= radius;
-            [x, y, z] = rotateXAxis(x, y, z, rotX);
-            [x, y, z] = rotateYAxis(x, y, z, rotY);
+        for (let i = 0; i < globeDots.length; i++) {
+            let [x, y, z] = globeDots[i];
+            x *= radius;
+            y *= radius;
+            z *= radius;
 
-            if (z > 0) continue;
+            [x, y, z] = rotateXAxis(x, y, z, rx);
+            [x, y, z] = rotateYAxis(x, y, z, ry);
+
+            if (z > 0) continue; // back-face cull
 
             const [sx, sy] = project(x, y, z, cx, cy, fov);
             const depthAlpha = Math.max(0.1, 1 - (z + radius) / (2 * radius));
@@ -588,7 +602,7 @@ function initGlobe() {
             ctx.fill();
         }
 
-        // Draw connections
+        // Draw connections as arcs
         for (const conn of CONNECTIONS) {
             const [lat1, lng1] = conn.from;
             const [lat2, lng2] = conn.to;
@@ -596,25 +610,27 @@ function initGlobe() {
             let [x1, y1, z1] = latLngToXYZ(lat1, lng1, radius);
             let [x2, y2, z2] = latLngToXYZ(lat2, lng2, radius);
 
-            [x1, y1, z1] = rotateXAxis(x1, y1, z1, rotX);
-            [x1, y1, z1] = rotateYAxis(x1, y1, z1, rotY);
-            [x2, y2, z2] = rotateXAxis(x2, y2, z2, rotX);
-            [x2, y2, z2] = rotateYAxis(x2, y2, z2, rotY);
+            [x1, y1, z1] = rotateXAxis(x1, y1, z1, rx);
+            [x1, y1, z1] = rotateYAxis(x1, y1, z1, ry);
+            [x2, y2, z2] = rotateXAxis(x2, y2, z2, rx);
+            [x2, y2, z2] = rotateYAxis(x2, y2, z2, ry);
 
+            // Only draw if at least one point faces camera
             if (z1 > radius * 0.3 && z2 > radius * 0.3) continue;
 
             const [sx1, sy1] = project(x1, y1, z1, cx, cy, fov);
             const [sx2, sy2] = project(x2, y2, z2, cx, cy, fov);
 
+            // Elevated midpoint for arc
             const midX = (x1 + x2) / 2;
             const midY = (y1 + y2) / 2;
             const midZ = (z1 + z2) / 2;
             const midLen = Math.sqrt(midX * midX + midY * midY + midZ * midZ);
-            const arcH = radius * 1.25;
+            const arcHeight = radius * 1.25;
             const [scx, scy] = project(
-                (midX / midLen) * arcH,
-                (midY / midLen) * arcH,
-                (midZ / midLen) * arcH,
+                (midX / midLen) * arcHeight,
+                (midY / midLen) * arcHeight,
+                (midZ / midLen) * arcHeight,
                 cx, cy, fov
             );
 
@@ -625,7 +641,7 @@ function initGlobe() {
             ctx.lineWidth = 1.2;
             ctx.stroke();
 
-            // Traveling dot
+            // Traveling dot along arc
             const t = (Math.sin(time * 1.2 + lat1 * 0.1) + 1) / 2;
             const tx = (1 - t) * (1 - t) * sx1 + 2 * (1 - t) * t * scx + t * t * sx2;
             const ty = (1 - t) * (1 - t) * sy1 + 2 * (1 - t) * t * scy + t * t * sy2;
@@ -639,8 +655,8 @@ function initGlobe() {
         // Draw markers
         for (const marker of MARKERS) {
             let [x, y, z] = latLngToXYZ(marker.lat, marker.lng, radius);
-            [x, y, z] = rotateXAxis(x, y, z, rotX);
-            [x, y, z] = rotateYAxis(x, y, z, rotY);
+            [x, y, z] = rotateXAxis(x, y, z, rx);
+            [x, y, z] = rotateYAxis(x, y, z, ry);
 
             if (z > radius * 0.1) continue;
 
@@ -676,8 +692,8 @@ function initGlobe() {
         drag.active = true;
         drag.startX = e.clientX;
         drag.startY = e.clientY;
-        drag.startRotY = rotY;
-        drag.startRotX = rotX;
+        drag.startRotY = rotationY;
+        drag.startRotX = rotationX;
         canvas.setPointerCapture(e.pointerId);
     });
 
@@ -685,17 +701,17 @@ function initGlobe() {
         if (!drag.active) return;
         const dx = e.clientX - drag.startX;
         const dy = e.clientY - drag.startY;
-        rotY = drag.startRotY + dx * 0.005;
-        rotX = Math.max(-1, Math.min(1, drag.startRotX + dy * 0.005));
+        rotationY = drag.startRotY + dx * 0.005;
+        rotationX = Math.max(-1, Math.min(1, drag.startRotX + dy * 0.005));
     });
 
     canvas.addEventListener('pointerup', () => { drag.active = false; });
     canvas.addEventListener('pointercancel', () => { drag.active = false; });
 
-    // Only run when visible
+    // Visibility-based start/stop (zero CPU when off-screen)
     createVisibilityLoop(canvas,
-        () => { animId = requestAnimationFrame(draw); },
-        () => { cancelAnimationFrame(animId); }
+        () => { running = true; animId = requestAnimationFrame(draw); },
+        () => { running = false; cancelAnimationFrame(animId); }
     );
 }
 
