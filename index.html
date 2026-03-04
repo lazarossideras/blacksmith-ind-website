@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blacksmith ind. — Your Next Hire Isn't Human</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="tubelight-nav">
+        <div class="tubelight-pill">
+            <a href="#hero" class="nav-logo" data-nav aria-label="Blacksmith Industries home">
+                <div class="logo-icon">
+                    <div class="logo-icon__gradient"></div>
+                    <svg class="logo-icon__svg" width="38" height="38" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="rotate(45 16 16)">
+                            <rect x="14" y="12" width="4" height="14" rx="2" fill="#fff"/>
+                            <rect x="6" y="5" width="20" height="8" rx="2.5" fill="#fff"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">Blacksmith<span class="nav-logo-dim"> ind.</span></span>
+            </a>
+            <a href="#case-studies" class="tubelight-link" data-nav>Case Studies</a>
+            <a href="#how-it-works" class="tubelight-link" data-nav>How it Works</a>
+            <a href="#services" class="tubelight-link" data-nav>What We Build</a>
+            <a href="#about" class="tubelight-link" data-nav>About Us</a>
+            <a href="mailto:info@blacksmith-ind.com" class="btn-colorful btn-colorful--nav" data-nav>
+                <div class="btn-colorful__gradient"></div>
+                <div class="btn-colorful__content">
+                    <span>Let's Talk</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17L17 7"/></svg>
+                </div>
+            </a>
+            <div class="tubelight-lamp" aria-hidden="true">
+                <div class="lamp-bar"></div>
+                <div class="lamp-glow-1"></div>
+                <div class="lamp-glow-2"></div>
+                <div class="lamp-glow-3"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE DYNAMIC ISLAND -->
+    <div class="mobile-topbar">
+        <a href="#hero" class="mobile-topbar-logo" aria-label="Blacksmith Industries home">
+            <div class="logo-icon logo-icon--mob">
+                <div class="logo-icon__gradient"></div>
+                <svg class="logo-icon__svg" width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="rotate(45 16 16)">
+                        <rect x="14" y="12" width="4" height="14" rx="2" fill="#fff"/>
+                        <rect x="6" y="5" width="20" height="8" rx="2.5" fill="#fff"/>
+                    </g>
+                </svg>
+            </div>
+            <span class="mobile-topbar-text">Blacksmith<span class="mobile-topbar-dim"> ind.</span></span>
+        </a>
+        <button class="mobile-hamburger" id="mobile-hamburger" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-inner">
+            <a href="#hero" class="mobile-menu-link" data-mobile-nav>Home</a>
+            <a href="#case-studies" class="mobile-menu-link" data-mobile-nav>Case Studies</a>
+            <a href="#how-it-works" class="mobile-menu-link" data-mobile-nav>How it Works</a>
+            <a href="#services" class="mobile-menu-link" data-mobile-nav>What We Build</a>
+            <a href="#about" class="mobile-menu-link" data-mobile-nav>About Us</a>
+            <a href="#contact" class="mobile-menu-cta" data-mobile-nav>
+                <span>Let's Talk</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17L17 7"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-headline">YOUR NEXT HIRE ISN'T <span class="colorful">HUMAN</span></h1>
+            <p class="hero-sub">AI-powered infrastructure that works 24/7, scales infinitely, and never calls in sick.</p>
+
+            <div class="hero-cta">
+                <a href="mailto:info@blacksmith-ind.com" class="btn-colorful">
+                    <div class="btn-colorful__gradient"></div>
+                    <div class="btn-colorful__content">
+                        <span>Let's Talk</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17L17 7"/></svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- SPLINE 3D BACKGROUND -->
+        <canvas id="canvas3d" class="hero-spline"></canvas>
+        <div class="spline-cover"></div>
+    </section>
+
+    <!-- LOGO TICKER -->
+    <section class="ticker-section">
+        <div class="ticker-fade ticker-fade--left"></div>
+        <div class="ticker-fade ticker-fade--right"></div>
+        <div class="ticker-track">
+            <div class="ticker-content">
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/openai.svg" alt="OpenAI" class="ticker-icon"><span>OpenAI</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/anthropic.svg" alt="Anthropic" class="ticker-icon"><span>Anthropic</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/n8n.svg" alt="n8n" class="ticker-icon"><span>n8n</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/make.svg" alt="Make" class="ticker-icon"><span>Make</span></div>
+                <div class="ticker-item"><span>_zapier</span></div>
+                <div class="ticker-item"><span>GoHighLevel</span></div>
+                <div class="ticker-item"><span>Pipedrive</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/salesforce.svg" alt="Salesforce" class="ticker-icon"><span>Salesforce</span></div>
+
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/microsoftazure.svg" alt="Azure" class="ticker-icon"><span>Azure</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/amazonwebservices.svg" alt="AWS" class="ticker-icon"><span>AWS</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/slack.svg" alt="Slack" class="ticker-icon"><span>Slack</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/clickup.svg" alt="ClickUp" class="ticker-icon"><span>ClickUp</span></div>
+                <div class="ticker-item"><span>Google</span></div>
+                <!-- DUPLICATE FOR SEAMLESS LOOP -->
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/openai.svg" alt="OpenAI" class="ticker-icon"><span>OpenAI</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/anthropic.svg" alt="Anthropic" class="ticker-icon"><span>Anthropic</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/n8n.svg" alt="n8n" class="ticker-icon"><span>n8n</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/make.svg" alt="Make" class="ticker-icon"><span>Make</span></div>
+                <div class="ticker-item"><span>_zapier</span></div>
+                <div class="ticker-item"><span>GoHighLevel</span></div>
+                <div class="ticker-item"><span>Pipedrive</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/salesforce.svg" alt="Salesforce" class="ticker-icon"><span>Salesforce</span></div>
+
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/microsoftazure.svg" alt="Azure" class="ticker-icon"><span>Azure</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/amazonwebservices.svg" alt="AWS" class="ticker-icon"><span>AWS</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/slack.svg" alt="Slack" class="ticker-icon"><span>Slack</span></div>
+                <div class="ticker-item"><img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/clickup.svg" alt="ClickUp" class="ticker-icon"><span>ClickUp</span></div>
+                <div class="ticker-item"><span>Google</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASE STUDIES -->
+    <section id="case-studies" class="cs-section">
+        <div class="cs-container">
+            <!-- Header -->
+            <div class="cs-header">
+                <div class="cs-badge">
+                    <span>Trusted by Industry Leaders</span>
+                    <div class="cs-badge-dot"></div>
+                </div>
+                <h2 class="cs-title">
+                    <span class="cs-title-gradient">Case Studies</span>
+                </h2>
+                <p class="cs-subtitle">Real results from real businesses we've transformed with autonomous AI systems.</p>
+            </div>
+
+            <!-- Testimonial Carousel -->
+            <div class="cs-carousel">
+                <div class="cs-viewport">
+                    <div class="cs-track" id="cs-track"></div>
+                </div>
+                <div class="cs-nav">
+                    <button class="cs-arrow" id="cs-prev" aria-label="Previous">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                    </button>
+                    <div class="cs-dots" id="cs-dots"></div>
+                    <button class="cs-arrow" id="cs-next" aria-label="Next">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="cs-stats">
+                <div class="cs-stat">
+                    <div class="cs-stat-number">5,000+</div>
+                    <div class="cs-stat-label">Hours Saved Annually</div>
+                </div>
+                <div class="cs-stat">
+                    <div class="cs-stat-number">$100K+</div>
+                    <div class="cs-stat-label">In Client Savings</div>
+                </div>
+                <div class="cs-stat">
+                    <div class="cs-stat-number">20+</div>
+                    <div class="cs-stat-label">Workflows Deployed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="hiw-section">
+        <div class="hiw-container">
+            <!-- Header -->
+            <div class="hiw-header">
+                <div class="hiw-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Our Process
+                </div>
+                <h2 class="hiw-title">How It Works</h2>
+                <p class="hiw-subtitle">A proven framework that turns your manual workflows into autonomous systems.</p>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="hiw-grid">
+                <!-- Step 1: Audit (span 2) -->
+                <div class="hiw-card">
+                    <div class="hiw-card-dots"></div>
+                    <div class="hiw-card-content">
+                        <div class="hiw-card-top">
+                            <div class="hiw-card-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </div>
+                            <span class="hiw-card-status">Step 1</span>
+                        </div>
+                        <div class="hiw-card-body">
+                            <h3 class="hiw-card-title">Audit<span class="hiw-card-meta">Deep-dive</span></h3>
+                            <p class="hiw-card-desc">We deep-dive into your current operations, map every workflow end-to-end, and surface every bottleneck, redundancy, and automation opportunity.</p>
+                        </div>
+                        <div class="hiw-card-footer">
+                            <div class="hiw-card-tags">
+                                <span>Mapping</span>
+                                <span>Analysis</span>
+                                <span>Bottlenecks</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiw-card-gradient"></div>
+                </div>
+
+                <!-- Step 2: Consult -->
+                <div class="hiw-card">
+                    <div class="hiw-card-dots"></div>
+                    <div class="hiw-card-content">
+                        <div class="hiw-card-top">
+                            <div class="hiw-card-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"/><rect width="18" height="18" x="3" y="4" rx="2"/><circle cx="12" cy="10" r="2"/><path d="M8 2v2"/><path d="M16 2v2"/></svg>
+                            </div>
+                            <span class="hiw-card-status">Step 2</span>
+                        </div>
+                        <div class="hiw-card-body">
+                            <h3 class="hiw-card-title">Consult<span class="hiw-card-meta">Architect</span></h3>
+                            <p class="hiw-card-desc">We present our findings, architect the ideal-state system together, and align on priorities, tools, and a clear roadmap.</p>
+                        </div>
+                        <div class="hiw-card-footer">
+                            <div class="hiw-card-tags">
+                                <span>Strategy</span>
+                                <span>Roadmap</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiw-card-gradient"></div>
+                </div>
+
+                <!-- Step 3: Automate -->
+                <div class="hiw-card">
+                    <div class="hiw-card-dots"></div>
+                    <div class="hiw-card-content">
+                        <div class="hiw-card-top">
+                            <div class="hiw-card-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                            </div>
+                            <span class="hiw-card-status">Step 3</span>
+                        </div>
+                        <div class="hiw-card-body">
+                            <h3 class="hiw-card-title">Automate<span class="hiw-card-meta">Deploy</span></h3>
+                            <p class="hiw-card-desc">We build and deploy the autonomous systems, connecting your tools into a seamless, hands-off pipeline.</p>
+                        </div>
+                        <div class="hiw-card-footer">
+                            <div class="hiw-card-tags">
+                                <span>Pipelines</span>
+                                <span>AI</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiw-card-gradient"></div>
+                </div>
+
+                <!-- Step 4: Optimise (span 2) -->
+                <div class="hiw-card">
+                    <div class="hiw-card-dots"></div>
+                    <div class="hiw-card-content">
+                        <div class="hiw-card-top">
+                            <div class="hiw-card-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            </div>
+                            <span class="hiw-card-status">Step 4</span>
+                        </div>
+                        <div class="hiw-card-body">
+                            <h3 class="hiw-card-title">Optimise<span class="hiw-card-meta">Refine</span></h3>
+                            <p class="hiw-card-desc">We monitor performance data and continuously refine every system for maximum speed, accuracy, and cost efficiency.</p>
+                        </div>
+                        <div class="hiw-card-footer">
+                            <div class="hiw-card-tags">
+                                <span>Performance</span>
+                                <span>Data</span>
+                                <span>Efficiency</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiw-card-gradient"></div>
+                </div>
+
+                <!-- Step 5: Scale (full width) -->
+                <div class="hiw-card">
+                    <div class="hiw-card-dots"></div>
+                    <div class="hiw-card-content">
+                        <div class="hiw-card-top">
+                            <div class="hiw-card-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+                            </div>
+                            <span class="hiw-card-status">Step 5</span>
+                        </div>
+                        <div class="hiw-card-body">
+                            <h3 class="hiw-card-title">Scale<span class="hiw-card-meta">Compound</span></h3>
+                            <p class="hiw-card-desc">We roll proven automations across new departments, processes, and revenue channels so growth compounds without additional headcount.</p>
+                        </div>
+                        <div class="hiw-card-footer">
+                            <div class="hiw-card-tags">
+                                <span>Growth</span>
+                                <span>Expansion</span>
+                                <span>Revenue</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hiw-card-gradient"></div>
+                </div>
+            </div>
+            <div class="hiw-dots">
+                <button class="hiw-dot active" data-index="0"></button>
+                <button class="hiw-dot" data-index="1"></button>
+                <button class="hiw-dot" data-index="2"></button>
+                <button class="hiw-dot" data-index="3"></button>
+                <button class="hiw-dot" data-index="4"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SYSTEMS ===== -->
+    <section id="services" class="systems-section">
+        <div class="systems-container">
+            <div class="systems-header">
+                <div class="hiw-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+                    Our Infrastructure
+                </div>
+                <h2 class="systems-title">What We Build</h2>
+                <p class="systems-subtitle">End-to-end AI infrastructure tailored to your operations. Each one designed to remove bottlenecks, cut costs, and compound output over time.</p>
+            </div>
+
+            <div class="sys-bento">
+                <!-- Card 1: Autonomous Employees (span 2) -->
+                <div class="sys-card sys-card--2col">
+                    <div class="sys-card-visual">
+                        <div class="sys-visual-robot">
+                            <div class="sys-pulse-ring"></div>
+                            <div class="sys-pulse-ring sys-pulse-ring--2"></div>
+                            <div class="sys-robot-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                            </div>
+                        </div>
+                        <span class="sys-visual-label">24/7 Active</span>
+                    </div>
+                    <div class="sys-card-text">
+                        <h3>Autonomous Employees</h3>
+                        <p>Proactive AI agents that research, execute, follow up, and escalate without being told. A team that never sleeps.</p>
+                        <div class="sys-card-tags">
+                            <span>Research</span>
+                            <span>Outreach</span>
+                            <span>Follow-ups</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Human-in-the-Loop (span 2) -->
+                <div class="sys-card sys-card--2col">
+                    <div class="sys-card-visual">
+                        <div class="sys-visual-hitl">
+                            <!-- Human figure -->
+                            <svg class="sys-hitl-human" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"/>
+                                <circle class="sys-hitl-head" cx="12" cy="7" r="4"/>
+                            </svg>
+                            <!-- Trust badge (bottom-right) -->
+                            <div class="sys-hitl-badge">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                                    <path d="m9 12 2 2 4-4"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sys-card-text">
+                        <h3>Human-in-the-Loop</h3>
+                        <p>AI does the heavy lifting while humans approve the critical calls. Built for compliance-first industries.</p>
+                        <div class="sys-card-tags">
+                            <span>Approvals</span>
+                            <span>Compliance</span>
+                            <span>Oversight</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Voice Agents (span 2) -->
+                <div class="sys-card sys-card--2col">
+                    <div class="sys-card-visual">
+                        <div class="sys-visual-waveform">
+                            <div class="sys-wave-bar" style="height: 20%"></div>
+                            <div class="sys-wave-bar" style="height: 45%"></div>
+                            <div class="sys-wave-bar" style="height: 70%"></div>
+                            <div class="sys-wave-bar" style="height: 100%"></div>
+                            <div class="sys-wave-bar" style="height: 80%"></div>
+                            <div class="sys-wave-bar" style="height: 55%"></div>
+                            <div class="sys-wave-bar" style="height: 90%"></div>
+                            <div class="sys-wave-bar" style="height: 60%"></div>
+                            <div class="sys-wave-bar" style="height: 35%"></div>
+                            <div class="sys-wave-bar" style="height: 75%"></div>
+                            <div class="sys-wave-bar" style="height: 50%"></div>
+                            <div class="sys-wave-bar" style="height: 25%"></div>
+                        </div>
+                    </div>
+                    <div class="sys-card-text">
+                        <h3>Voice Agents</h3>
+                        <p>AI phone agents for outbound lead qualification, appointment booking, and customer support around the clock.</p>
+                        <div class="sys-card-tags">
+                            <span>Calls</span>
+                            <span>Booking</span>
+                            <span>Support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Process Automation (span 3) -->
+                <div class="sys-card sys-card--3col sys-card-process">
+                    <div class="sys-card-split">
+                        <div class="sys-card-text">
+                            <div class="sys-icon-ring">
+                                <svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <!-- Nodes -->
+                                    <rect x="2" y="10" width="8" height="8" rx="2"/>
+                                    <rect x="22" y="4" width="8" height="8" rx="2"/>
+                                    <rect x="22" y="18" width="8" height="8" rx="2"/>
+                                    <!-- Connecting lines -->
+                                    <path d="M10 14 H15 Q17 14 17 12 V8 Q17 6 19 6 H22" fill="none"/>
+                                    <path d="M10 14 H15 Q17 14 17 16 V20 Q17 22 19 22 H22" fill="none"/>
+                                </svg>
+                            </div>
+                            <h3>Process Automation</h3>
+                            <p>Connect your existing tools into seamless, hands-off pipelines. CRMs, email, payments — all wired together.</p>
+                            <div class="sys-card-tags">
+                                <span>Pipelines</span>
+                                <span>Integrations</span>
+                                <span>n8n</span>
+                            </div>
+                        </div>
+                        <div class="sys-card-flow">
+                            <svg class="sys-flow-svg" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- TOP paths (3 badges → AI hub) -->
+                                <g stroke="rgba(255,255,255,0.08)" stroke-width="0.8" fill="none" stroke-dasharray="200 200" pathLength="200">
+                                    <path d="M 48 24 V 44 Q 48 52 56 52 H 110 Q 118 52 118 60 V 72"/>
+                                    <path d="M 120 24 V 72"/>
+                                    <path d="M 192 24 V 44 Q 192 52 184 52 H 130 Q 122 52 122 60 V 72"/>
+                                    <animate attributeName="stroke-dashoffset" from="200" to="0" dur="1.2s" fill="freeze" calcMode="spline" keySplines="0.25,0.1,0.5,1" keyTimes="0;1"/>
+                                </g>
+                                <!-- BOTTOM paths (3 badges → AI hub) -->
+                                <g stroke="rgba(255,255,255,0.08)" stroke-width="0.8" fill="none" stroke-dasharray="200 200" pathLength="200">
+                                    <path d="M 48 158 V 138 Q 48 130 56 130 H 110 Q 118 130 118 122 V 108"/>
+                                    <path d="M 120 158 V 108"/>
+                                    <path d="M 192 158 V 138 Q 192 130 184 130 H 130 Q 122 130 122 122 V 108"/>
+                                    <animate attributeName="stroke-dashoffset" from="200" to="0" dur="1.2s" fill="freeze" calcMode="spline" keySplines="0.25,0.1,0.5,1" keyTimes="0;1"/>
+                                </g>
+                                <!-- Top light orbs -->
+                                <g mask="url(#fm-t1)"><circle class="sys-flow-light sys-fl-t1" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <g mask="url(#fm-t2)"><circle class="sys-flow-light sys-fl-t2" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <g mask="url(#fm-t3)"><circle class="sys-flow-light sys-fl-t3" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <!-- Bottom light orbs -->
+                                <g mask="url(#fm-b1)"><circle class="sys-flow-light sys-fl-b1" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <g mask="url(#fm-b2)"><circle class="sys-flow-light sys-fl-b2" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <g mask="url(#fm-b3)"><circle class="sys-flow-light sys-fl-b3" cx="0" cy="0" r="14" fill="url(#flow-purple-grad)"/></g>
+                                <!-- TOP badges -->
+                                <g font-family="Inter, sans-serif" font-size="8" font-weight="500">
+                                    <!-- CRM -->
+                                    <rect x="22" y="6" width="52" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <circle cx="35" cy="15" r="4" stroke="#a855f7" stroke-width="0.8" fill="none"/>
+                                    <text x="43" y="18" fill="rgba(255,255,255,0.6)" stroke="none">CRM</text>
+                                    <!-- Email -->
+                                    <rect x="92" y="6" width="56" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <rect x="104" y="12" width="8" height="5.5" rx="1" stroke="#a855f7" stroke-width="0.8" fill="none"/>
+                                    <path d="M104 12.5 L108 15.5 L112 12.5" stroke="#a855f7" stroke-width="0.6" fill="none"/>
+                                    <text x="116" y="18" fill="rgba(255,255,255,0.6)" stroke="none">Email</text>
+                                    <!-- Stripe -->
+                                    <rect x="164" y="6" width="56" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <text x="177" y="19" fill="#a855f7" font-size="11" font-weight="700" stroke="none">S</text>
+                                    <text x="186" y="18" fill="rgba(255,255,255,0.6)" stroke="none">Stripe</text>
+                                </g>
+                                <!-- BOTTOM badges -->
+                                <g font-family="Inter, sans-serif" font-size="8" font-weight="500">
+                                    <!-- Slack -->
+                                    <rect x="22" y="158" width="52" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <g transform="translate(32, 163)" fill="none" stroke="#a855f7" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M0 5 Q0 0 5 0 H7 Q9 0 9 2 V6 Q9 8 7 8 H3 L1 10 V8 Q0 8 0 6 Z"/>
+                                    </g>
+                                    <text x="45" y="170" fill="rgba(255,255,255,0.6)" stroke="none">Slack</text>
+                                    <!-- Sheets -->
+                                    <rect x="88" y="158" width="64" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <rect x="100" y="163" width="7" height="8" rx="1" stroke="#a855f7" stroke-width="0.7" fill="none"/>
+                                    <line x1="100" y1="166" x2="107" y2="166" stroke="#a855f7" stroke-width="0.4"/>
+                                    <line x1="100" y1="168.5" x2="107" y2="168.5" stroke="#a855f7" stroke-width="0.4"/>
+                                    <line x1="103.5" y1="163" x2="103.5" y2="171" stroke="#a855f7" stroke-width="0.4"/>
+                                    <text x="111" y="170" fill="rgba(255,255,255,0.6)" stroke="none">Sheets</text>
+                                    <!-- Notion -->
+                                    <rect x="164" y="158" width="60" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" stroke-width="0.6"/>
+                                    <g transform="translate(174, 162)" fill="none" stroke="#a855f7" stroke-width="0.7">
+                                        <rect x="0" y="0" width="8" height="10" rx="1.5"/>
+                                        <line x1="2.5" y1="3" x2="5.5" y2="3"/>
+                                        <line x1="2.5" y1="5" x2="5.5" y2="5"/>
+                                        <line x1="2.5" y1="7" x2="4.5" y2="7"/>
+                                    </g>
+                                    <text x="185" y="170" fill="rgba(255,255,255,0.6)" stroke="none">Notion</text>
+                                </g>
+                                <!-- Central AI hub -->
+                                <g>
+                                    <circle cx="120" cy="90" r="24" stroke="rgba(123,97,255,0.07)" stroke-width="0.5" fill="none" class="sys-hub-ring sys-hub-ring-1"/>
+                                    <circle cx="120" cy="90" r="32" stroke="rgba(123,97,255,0.04)" stroke-width="0.5" fill="none" class="sys-hub-ring sys-hub-ring-2"/>
+                                    <rect x="96" y="78" width="48" height="24" rx="7" fill="rgba(123,97,255,0.12)" stroke="rgba(123,97,255,0.3)" stroke-width="0.7"/>
+                                    <path d="M111 90 L113 86 L115 90 L119 88 L115 90 L117 94 L115 90 L111 92 Z" fill="#a855f7" stroke="none" opacity="0.8"/>
+                                    <text x="121" y="93" fill="white" font-family="Inter, sans-serif" font-size="9" font-weight="600" text-anchor="start" stroke="none" opacity="0.9">AI</text>
+                                </g>
+                                <!-- Defs -->
+                                <defs>
+                                    <!-- Top masks -->
+                                    <mask id="fm-t1"><path d="M 48 24 V 44 Q 48 52 56 52 H 110 Q 118 52 118 60 V 78" stroke="white" stroke-width="1"/></mask>
+                                    <mask id="fm-t2"><path d="M 120 24 V 78" stroke="white" stroke-width="1"/></mask>
+                                    <mask id="fm-t3"><path d="M 192 24 V 44 Q 192 52 184 52 H 130 Q 122 52 122 60 V 78" stroke="white" stroke-width="1"/></mask>
+                                    <!-- Bottom masks -->
+                                    <mask id="fm-b1"><path d="M 48 158 V 138 Q 48 130 56 130 H 110 Q 118 130 118 122 V 102" stroke="white" stroke-width="1"/></mask>
+                                    <mask id="fm-b2"><path d="M 120 158 V 102" stroke="white" stroke-width="1"/></mask>
+                                    <mask id="fm-b3"><path d="M 192 158 V 138 Q 192 130 184 130 H 130 Q 122 130 122 122 V 102" stroke="white" stroke-width="1"/></mask>
+                                    <radialGradient id="flow-purple-grad" fx="1">
+                                        <stop offset="0%" stop-color="#7B61FF"/>
+                                        <stop offset="100%" stop-color="transparent"/>
+                                    </radialGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Internal Tools (span 3) -->
+                <div class="sys-card sys-card--3col sys-card-tools">
+                    <div class="sys-card-split">
+                        <div class="sys-card-text">
+                            <div class="sys-icon-ring">
+                                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                            </div>
+                            <h3>Internal Tools</h3>
+                            <p>Custom dashboards, admin panels, and operational tools built to fit the way your team actually works.</p>
+                            <div class="sys-card-tags">
+                                <span>Dashboards</span>
+                                <span>Admin</span>
+                                <span>Ops</span>
+                            </div>
+                        </div>
+                        <div class="sys-card-panel">
+                            <!-- Top bar -->
+                            <div class="sys-dash-topbar">
+                                <div class="sys-panel-dots"><span></span><span></span><span></span></div>
+                                <div class="sys-dash-nav">
+                                    <span class="sys-dash-nav-item active">Overview</span>
+                                    <span class="sys-dash-nav-item">Agents</span>
+                                    <span class="sys-dash-nav-item">Logs</span>
+                                </div>
+                            </div>
+                            <!-- Stat cards row -->
+                            <div class="sys-dash-stats">
+                                <div class="sys-dash-stat">
+                                    <span class="sys-dash-stat-label">Tasks</span>
+                                    <span class="sys-dash-stat-value">1,284</span>
+                                    <span class="sys-dash-stat-change up">+12%</span>
+                                </div>
+                                <div class="sys-dash-stat">
+                                    <span class="sys-dash-stat-label">Uptime</span>
+                                    <span class="sys-dash-stat-value">99.8%</span>
+                                    <span class="sys-dash-stat-change up">+0.3%</span>
+                                </div>
+                                <div class="sys-dash-stat">
+                                    <span class="sys-dash-stat-label">Errors</span>
+                                    <span class="sys-dash-stat-value">3</span>
+                                    <span class="sys-dash-stat-change down">-67%</span>
+                                </div>
+                            </div>
+                            <!-- Mini bar chart -->
+                            <div class="sys-dash-chart">
+                                <div class="sys-dash-chart-label">Throughput</div>
+                                <div class="sys-dash-bars">
+                                    <div class="sys-dash-bar" style="height: 40%"></div>
+                                    <div class="sys-dash-bar" style="height: 65%"></div>
+                                    <div class="sys-dash-bar" style="height: 50%"></div>
+                                    <div class="sys-dash-bar" style="height: 80%"></div>
+                                    <div class="sys-dash-bar" style="height: 60%"></div>
+                                    <div class="sys-dash-bar" style="height: 90%"></div>
+                                    <div class="sys-dash-bar" style="height: 75%"></div>
+                                    <div class="sys-dash-bar" style="height: 55%"></div>
+                                    <div class="sys-dash-bar" style="height: 85%"></div>
+                                    <div class="sys-dash-bar" style="height: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT US ===== -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-header">
+                <div class="hiw-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    About Us
+                </div>
+                <h2 class="about-title">The Human Behind<br>the Machines</h2>
+                <p class="about-subtitle">AI doesn't solve problems. People do. AI just makes the solution run forever.</p>
+            </div>
+
+            <!-- Full-width glow card -->
+            <div class="about-card-wrapper">
+                <div class="about-card-glow"></div>
+                <div class="about-card">
+                    <div class="about-card-inner">
+                        <!-- Left: Photo + socials -->
+                        <div class="about-photo-col">
+                            <div class="about-photo">
+                                <img src="upwork-pfp.jpg" alt="Lazaros Sideras — Founder of Blacksmith Industries">
+                            </div>
+                            <div class="about-founder-name">Lazaros Sideras</div>
+                            <div class="about-founder-role">Founder & CEO</div>
+                            <div class="about-socials">
+                                <a href="https://www.linkedin.com/in/lazarossideras/" target="_blank" rel="noopener noreferrer" class="about-social-link" aria-label="LinkedIn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                                </a>
+                                <a href="https://x.com/sideras_lazaros" target="_blank" rel="noopener noreferrer" class="about-social-link" aria-label="Twitter">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Bio + mission -->
+                        <div class="about-bio-col">
+                            <div class="about-bio-section">
+                                <h3 class="about-bio-heading">Hi, I'm Lazaros</h3>
+                                <p class="about-bio-text">Military officer first (Second Lieutenant), then Robotics at the University of Manchester, where I raised seed funding for a startup and pitched it at Web Summit. Different worlds, same pattern: broken systems everywhere and nobody fixing them properly.</p>
+                                <p class="about-bio-text">So I started Blacksmith Industries. We've saved our clients 5,000+ hours annually and over $100K. Every project is designed to cut costs or generate revenue, usually paying for itself within 3-6 months.</p>
+                                <p class="about-bio-text">Most automation projects overpromise and underdeliver. We build systems that actually move the needle.</p>
+                            </div>
+
+                            <div class="about-bio-section">
+                                <h3 class="about-bio-heading">Experience</h3>
+                                <div class="about-exp-tags">
+                                    <span>AI Automation</span>
+                                    <span>Process Optimisation</span>
+                                    <span>CRM Systems</span>
+                                    <span>Voice AI</span>
+                                    <span>API Integrations</span>
+                                    <span>AI Infrastructure</span>
+                                </div>
+                            </div>
+
+                            <div class="about-bio-section">
+                                <h3 class="about-bio-heading">Our Mission</h3>
+                                <p class="about-mission-text">Build AI systems that fund themselves. Cut costs, generate revenue, and free your team to do what actually matters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / FREE CONSULTATION -->
+    <section id="contact" class="cta-section">
+        <div class="cta-container">
+            <div class="cta-content">
+                <div class="cta-trust-badge">
+                    <div class="cs-badge-dot"></div>
+                    <span>Trusted by Industry Leaders</span>
+                </div>
+                <h2 class="cta-headline">See What's Possible<br>With AI</h2>
+                <p class="cta-subtitle">Book a 30-minute strategy call. We'll audit your current operations, identify the biggest automation opportunities, and build you a custom AI roadmap for your business.</p>
+                <a href="mailto:info@blacksmith-ind.com" class="btn-colorful cta-btn">
+                    <div class="btn-colorful__gradient"></div>
+                    <div class="btn-colorful__content">
+                        <span>Get Your Free AI Roadmap</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17L17 7"/></svg>
+                    </div>
+                </a>
+                <p class="cta-reassurance">No commitment — you walk away with a custom AI roadmap either way.</p>
+            </div>
+            <div class="cta-globe-wrap">
+                <canvas id="globe-canvas"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <a href="#hero" class="footer-logo" aria-label="Blacksmith Industries home">
+                <div class="logo-icon logo-icon--sm">
+                    <div class="logo-icon__gradient"></div>
+                    <svg class="logo-icon__svg" width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="rotate(45 16 16)">
+                            <rect x="14" y="12" width="4" height="14" rx="2" fill="#fff"/>
+                            <rect x="6" y="5" width="20" height="8" rx="2.5" fill="#fff"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="footer-logo-text">Blacksmith<span class="footer-logo-dim"> ind.</span></span>
+            </a>
+<div class="footer-links">
+                <a href="#hero">Home</a>
+                <a href="#case-studies">Case Studies</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#services">What We Build</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-copy">&copy; 2026 Blacksmith Industries. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Intercept Spline watermark at every DOM insertion point -->
+    <script>
+    (function(){
+        function isWM(n){
+            if(!n||n.nodeType!==1)return false;
+            if(n.classList&&(n.classList.contains('spline-watermark')||n.classList.contains('watermark')))return true;
+            if(n.tagName==='A'){
+                var h=n.getAttribute('href')||'';
+                if(h.indexOf('spline')!==-1)return true;
+            }
+            var t=(n.textContent||'').toLowerCase();
+            if(t==='built with spline'||t==='made in spline')return true;
+            return false;
+        }
+        function scrub(el){
+            if(!el||!el.querySelectorAll)return;
+            el.querySelectorAll('.spline-watermark,a[href*="spline.design"],a[href*="spline"]').forEach(function(x){x.remove();});
+        }
+        // Patch appendChild
+        var origAC=Element.prototype.appendChild;
+        Element.prototype.appendChild=function(c){
+            if(isWM(c))return c;
+            var r=origAC.call(this,c);
+            if(c.nodeType===1)scrub(c);
+            return r;
+        };
+        // Patch insertBefore
+        var origIB=Element.prototype.insertBefore;
+        Element.prototype.insertBefore=function(c,ref){
+            if(isWM(c))return c;
+            var r=origIB.call(this,c,ref);
+            if(c.nodeType===1)scrub(c);
+            return r;
+        };
+        // Patch append
+        var origAp=Element.prototype.append;
+        if(origAp)Element.prototype.append=function(){
+            var a=[].slice.call(arguments).filter(function(x){return !isWM(x);});
+            var r=origAp.apply(this,a);
+            scrub(this);
+            return r;
+        };
+        // Patch insertAdjacentElement
+        var origIAE=Element.prototype.insertAdjacentElement;
+        if(origIAE)Element.prototype.insertAdjacentElement=function(pos,el){
+            if(isWM(el))return null;
+            return origIAE.call(this,pos,el);
+        };
+        // Patch insertAdjacentHTML — scrub after injection
+        var origIAH=Element.prototype.insertAdjacentHTML;
+        if(origIAH)Element.prototype.insertAdjacentHTML=function(pos,html){
+            origIAH.call(this,pos,html);
+            scrub(this.parentElement||this);
+        };
+        // Patch innerHTML setter — scrub after set
+        var desc=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');
+        if(desc&&desc.set){
+            var origSet=desc.set;
+            Object.defineProperty(Element.prototype,'innerHTML',{
+                set:function(v){origSet.call(this,v);scrub(this);},
+                get:desc.get,configurable:true
+            });
+        }
+        // MutationObserver as final safety net
+        new MutationObserver(function(muts){
+            muts.forEach(function(m){
+                m.addedNodes.forEach(function(n){
+                    if(n.nodeType===1){
+                        if(isWM(n)){n.remove();return;}
+                        scrub(n);
+                    }
+                });
+            });
+        }).observe(document.documentElement,{childList:true,subtree:true});
+    })();
+    </script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

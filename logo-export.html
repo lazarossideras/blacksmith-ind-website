@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap');
+  body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #111; gap: 24px; font-family: sans-serif; color: #fff; }
+  canvas { border: 1px solid #333; }
+  button { padding: 12px 32px; background: #7B61FF; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  button:hover { background: #6a50e0; }
+  p { color: #888; font-size: 14px; }
+</style>
+</head>
+<body>
+  <p>Right-click the image below → "Save image as" or click the button</p>
+  <canvas id="c" width="512" height="512"></canvas>
+  <button onclick="download()">Download PNG</button>
+<script>
+document.fonts.ready.then(() => {
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const s = 512;
+const cy = s / 2;
+
+// Transparent background
+
+// --- Measure total width first to center everything ---
+const iconSize = 88;
+const gap = 14;
+ctx.font = '700 42px Inter, Arial, sans-serif';
+const blacksmithW = ctx.measureText('Blacksmith').width;
+ctx.font = '600 42px Inter, Arial, sans-serif';
+const indW = ctx.measureText(' ind.').width;
+const totalW = iconSize + gap + blacksmithW + indW;
+const startX = (s - totalW) / 2;
+
+// --- Icon box ---
+const iconR = 18;
+const iconX = startX;
+const iconY = cy - iconSize / 2;
+
+// Outer glow behind the icon (the spill effect from the website)
+ctx.save();
+ctx.filter = 'blur(20px)';
+const outerGlow = ctx.createLinearGradient(iconX - 12, iconY, iconX + iconSize + 12, iconY + iconSize);
+outerGlow.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
+outerGlow.addColorStop(0.5, 'rgba(168, 85, 247, 0.25)');
+outerGlow.addColorStop(1, 'rgba(236, 72, 153, 0.25)');
+ctx.fillStyle = outerGlow;
+ctx.beginPath();
+ctx.roundRect(iconX - 6, iconY - 6, iconSize + 12, iconSize + 12, iconR + 6);
+ctx.fill();
+ctx.restore();
+
+// Rounded square bg
+ctx.beginPath();
+ctx.roundRect(iconX, iconY, iconSize, iconSize, iconR);
+ctx.fillStyle = '#1a1a2e';
+ctx.fill();
+
+// Gradient glow inside icon
+ctx.save();
+ctx.beginPath();
+ctx.roundRect(iconX, iconY, iconSize, iconSize, iconR);
+ctx.clip();
+
+const glow = ctx.createLinearGradient(iconX, iconY, iconX + iconSize, iconY + iconSize);
+glow.addColorStop(0, 'rgba(99, 102, 241, 0.95)');
+glow.addColorStop(0.5, 'rgba(168, 85, 247, 0.95)');
+glow.addColorStop(1, 'rgba(236, 72, 153, 0.95)');
+
+ctx.filter = 'blur(14px)';
+ctx.fillStyle = glow;
+ctx.fillRect(iconX, iconY, iconSize, iconSize);
+ctx.restore();
+
+// Hammer inside icon
+const hCx = iconX + iconSize / 2;
+const hCy = iconY + iconSize / 2;
+const sc = iconSize / 32;
+
+ctx.save();
+ctx.translate(hCx, hCy);
+ctx.rotate(45 * Math.PI / 180);
+
+// Handle (centered: -8 to +8 vertically)
+ctx.beginPath();
+ctx.roundRect(-2 * sc, -2 * sc, 4 * sc, 16 * sc, 2 * sc);
+ctx.fillStyle = '#ffffff';
+ctx.fill();
+
+// Head (sits on top of handle)
+ctx.beginPath();
+ctx.roundRect(-10 * sc, -9 * sc, 20 * sc, 8 * sc, 2.5 * sc);
+ctx.fillStyle = '#ffffff';
+ctx.fill();
+
+ctx.restore();
+
+// --- Text ---
+const textX = iconX + iconSize + gap;
+
+// "Blacksmith" white
+ctx.textBaseline = 'middle';
+ctx.font = '700 42px Inter, Arial, sans-serif';
+ctx.fillStyle = '#1a1a2e';
+ctx.fillText('Blacksmith', textX, cy);
+
+// " ind." dimmed
+ctx.font = '600 42px Inter, Arial, sans-serif';
+ctx.fillStyle = 'rgba(26, 26, 46, 0.4)';
+ctx.fillText(' ind.', textX + blacksmithW, cy);
+
+});
+
+function download() {
+  const canvas = document.getElementById('c');
+  const a = document.createElement('a');
+  a.download = 'blacksmith-logo.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>
