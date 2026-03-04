@@ -517,7 +517,7 @@ function initGlobe() {
         const radius = Math.min(w, h) * 0.38;
         const fov = 600;
 
-        if (!drag.active) rotY += AUTO_ROTATE_SPEED;
+        // Auto-rotation disabled for performance testing
         time += 0.015;
 
         ctx.clearRect(0, 0, w, h);
