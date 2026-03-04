@@ -115,25 +115,7 @@ const scrollObserver = new IntersectionObserver((entries) => {
 
 sections.forEach(section => scrollObserver.observe(section));
 
-// ===== MOBILE HAMBURGER MENU =====
-const hamburger = document.getElementById('mobile-hamburger');
-const mobileMenu = document.getElementById('mobile-menu');
-
-if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('open');
-        mobileMenu.classList.toggle('open');
-        document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-    });
-
-    document.querySelectorAll('[data-mobile-nav]').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('open');
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-    });
-}
+// Mobile menu removed — replaced hamburger with direct CTA button
 
 // Ticker scrolls continuously — no pause on hover
 

@@ -262,6 +262,24 @@ a {
     font-size: 13px;
 }
 
+/* Mobile topbar variant */
+.btn-colorful--mob {
+    height: 36px;
+    padding: 0 14px;
+    margin: 0;
+    justify-content: center;
+}
+
+.btn-colorful--mob .btn-colorful__gradient {
+    opacity: 0.8;
+    filter: blur(10px);
+}
+
+.btn-colorful--mob .btn-colorful__content {
+    font-size: 12px;
+    gap: 4px;
+}
+
 /* Hero CTA */
 .hero-cta {
     margin-top: 48px;
@@ -1863,112 +1881,6 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
 }
 
 /* ===== MOBILE HAMBURGER ===== */
-.mobile-hamburger {
-    display: none;
-    width: 32px;
-    height: 32px;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 0;
-    margin-left: 12px;
-    z-index: 200;
-}
-
-.mobile-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--white);
-    border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.mobile-hamburger.open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.mobile-hamburger.open span:nth-child(2) {
-    opacity: 0;
-}
-
-.mobile-hamburger.open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
-/* ===== MOBILE MENU OVERLAY ===== */
-.mobile-menu {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 150;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-
-.mobile-menu.open {
-    opacity: 1;
-    visibility: visible;
-}
-
-.mobile-menu-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 8px;
-    padding: 24px;
-}
-
-.mobile-menu-link {
-    font-family: 'Anton', sans-serif;
-    font-size: 32px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-    padding: 12px 24px;
-    border-radius: 12px;
-    transition: color 0.3s ease, background 0.3s ease;
-    text-align: center;
-}
-
-.mobile-menu-link:hover,
-.mobile-menu-link:active {
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.mobile-menu-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 24px;
-    padding: 16px 40px;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--white);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.mobile-menu-cta:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
-}
-
 /* ===== ABOUT US ===== */
 .about-section {
     position: relative;
@@ -2504,14 +2416,6 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
 
     .mobile-topbar {
         display: flex;
-    }
-
-    .mobile-topbar .mobile-hamburger {
-        display: flex;
-    }
-
-    .mobile-menu {
-        display: block;
     }
 
     /* Hero */
@@ -3171,10 +3075,6 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
 
     .hero-content {
         margin-top: 40px;
-    }
-
-    .mobile-menu-link {
-        font-size: 26px;
     }
 
     .cs-card {
