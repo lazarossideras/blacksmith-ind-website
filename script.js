@@ -119,6 +119,39 @@ sections.forEach(section => scrollObserver.observe(section));
 
 // Ticker scrolls continuously — no pause on hover
 
+// ===== COUNT-UP ANIMATION FOR STATS =====
+const statNumbers = document.querySelectorAll('.cs-stat-number[data-count]');
+if (statNumbers.length) {
+    const duration = 1800;
+    let counted = false;
+
+    const countObserver = new IntersectionObserver((entries) => {
+        if (counted || !entries[0].isIntersecting) return;
+        counted = true;
+
+        statNumbers.forEach(el => {
+            const target = parseInt(el.dataset.count, 10);
+            const prefix = el.dataset.prefix || '';
+            const suffix = el.dataset.suffix || '';
+            const useComma = el.dataset.comma === 'true';
+            const start = performance.now();
+
+            function tick(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                const display = useComma ? current.toLocaleString() : current;
+                el.textContent = prefix + display + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        });
+    }, { threshold: 0.5 });
+
+    countObserver.observe(document.querySelector('.cs-stats'));
+}
+
 // ===== CASE STUDIES CAROUSEL =====
 const caseStudies = [
     {
