@@ -22,12 +22,18 @@ function createVisibilityLoop(element, startFn, stopFn) {
 const splineCanvas = document.getElementById('canvas3d');
 if (splineCanvas) {
     // Defer Spline load so the rest of the page renders first
-    requestIdleCallback(() => {
+    // Use requestIdleCallback with setTimeout fallback (Safari/older mobile don't support rIC)
+    const loadSpline = () => {
         import('https://esm.sh/@splinetool/runtime').then(({ Application }) => {
             const app = new Application(splineCanvas);
             app.load('https://prod.spline.design/PJGgP8Fu-UTvdRDo/scene.splinecode');
         });
-    }, { timeout: 2000 });
+    };
+    if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(loadSpline, { timeout: 2000 });
+    } else {
+        setTimeout(loadSpline, 200);
+    }
 }
 
 // Tubelight nav
@@ -515,12 +521,6 @@ function initGlobe() {
     const canvas = document.getElementById('globe-canvas');
     if (!canvas) return;
 
-    // Kill globe entirely on mobile
-    if (isMobile) {
-        canvas.style.display = 'none';
-        return;
-    }
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -562,9 +562,9 @@ function initGlobe() {
     let animId = 0;
     const drag = { active: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
 
-    // Generate dots (Fibonacci sphere)
+    // Generate dots (Fibonacci sphere) — fewer on mobile for performance
     const dots = [];
-    const NUM_DOTS = 1200;
+    const NUM_DOTS = isMobile ? 500 : 1200;
     const goldenRatio = (1 + Math.sqrt(5)) / 2;
     for (let i = 0; i < NUM_DOTS; i++) {
         const theta = (2 * Math.PI * i) / goldenRatio;

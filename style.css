@@ -3135,9 +3135,8 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
         font-size: 12px;
     }
 
-    #globe-canvas,
-    .cta-globe-wrap {
-        display: none;
+    #globe-canvas {
+        max-width: 260px;
     }
 
     /* Footer mobile */
