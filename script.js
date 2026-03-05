@@ -18,22 +18,15 @@ function createVisibilityLoop(element, startFn, stopFn) {
     observer.observe(element);
 }
 
-// ===== LAZY-LOAD SPLINE 3D SCENE =====
+// ===== LOAD SPLINE 3D SCENE =====
 const splineCanvas = document.getElementById('canvas3d');
 if (splineCanvas) {
-    // Defer Spline load so the rest of the page renders first
-    // Use requestIdleCallback with setTimeout fallback (Safari/older mobile don't support rIC)
-    const loadSpline = () => {
-        import('https://esm.sh/@splinetool/runtime').then(({ Application }) => {
-            const app = new Application(splineCanvas);
-            app.load('https://prod.spline.design/PJGgP8Fu-UTvdRDo/scene.splinecode');
+    import('https://esm.sh/@splinetool/runtime').then(({ Application }) => {
+        const app = new Application(splineCanvas);
+        app.load('https://prod.spline.design/PJGgP8Fu-UTvdRDo/scene.splinecode').then(() => {
+            splineCanvas.style.opacity = '1';
         });
-    };
-    if (typeof requestIdleCallback === 'function') {
-        requestIdleCallback(loadSpline, { timeout: 2000 });
-    } else {
-        setTimeout(loadSpline, 200);
-    }
+    });
 }
 
 // Tubelight nav

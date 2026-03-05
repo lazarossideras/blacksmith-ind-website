@@ -415,6 +415,8 @@ a {
     height: 100%;
     z-index: 2;
     pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.8s ease;
 }
 
 /* Nuclear Spline watermark hide */
