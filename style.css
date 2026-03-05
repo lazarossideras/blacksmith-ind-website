@@ -33,6 +33,11 @@ a {
 }
 
 /* ===== TUBELIGHT NAVIGATION ===== */
+.logo-icon-img {
+    flex-shrink: 0;
+    display: block;
+}
+
 /* Logo icon — matches hero CTA button style */
 .logo-icon {
     position: relative;
