@@ -2459,7 +2459,7 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     }
 
     .ticker-content {
-        animation-duration: 30s;
+        animation-duration: 45s;
     }
 
     .ticker-fade {
