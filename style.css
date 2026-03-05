@@ -2445,17 +2445,21 @@ a[href*="spline"]:not(.btn-colorful):not([href*="calendly"]):not([data-nav]),
     }
 
     .ticker-item {
-        padding: 0 28px;
-        gap: 12px;
+        padding: 0 14px;
+        gap: 8px;
     }
 
     .ticker-item span {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .ticker-icon {
-        width: 34px;
-        height: 34px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .ticker-content {
+        animation-duration: 30s;
     }
 
     .ticker-fade {
