@@ -455,7 +455,7 @@ function initGlobe() {
     const DOT_COLOR = 'rgba(123, 97, 255, ALPHA)';
     const ARC_COLOR = 'rgba(168, 85, 247, 0.5)';
     const MARKER_COLOR = 'rgba(200, 171, 255, 1)';
-    const AUTO_ROTATE_SPEED = 0.002;
+    const AUTO_ROTATE_SPEED = 0.001;
 
     const MARKERS = [
         { lat: 37.78, lng: -122.42, label: 'San Francisco' },
@@ -552,7 +552,7 @@ function initGlobe() {
         if (!drag.active) {
             rotationY += AUTO_ROTATE_SPEED;
         }
-        time += 0.015;
+        time += 0.0075;
 
         const ry = rotationY;
         const rx = rotationX;
