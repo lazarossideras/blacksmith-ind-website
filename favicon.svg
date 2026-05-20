@@ -6,8 +6,8 @@
       <stop offset="100%" stop-color="#ec4899"/>
     </linearGradient>
   </defs>
-  <!-- Rounded square with gradient background -->
-  <rect width="512" height="512" rx="96" ry="96" fill="url(#bgGrad)"/>
+  <!-- Square with gradient background -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
   <!-- Centered white hammer — same path as logo, properly scaled -->
   <g transform="translate(32, 32)">
     <svg viewBox="0 0 12000 12000" width="448" height="448">
