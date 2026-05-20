@@ -178,14 +178,14 @@ const caseStudies = [
         highlight: "Admin on autopilot — inquiry to post-delivery"
     },
     {
-        name: "$20M+ Streetwear Ecommerce Brand",
+        name: "$30M+ Streetwear Ecommerce Brand",
         subtitle: "Toronto",
-        status: "IN PROGRESS",
-        statusClass: "in-progress",
+        status: "DEPLOYED",
+        statusClass: "deployed",
         icon: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
         text: "End-to-end wholesale automation. AI intent classification, 7-stage buyer pipeline, auto-generated Shopify orders, and intelligent scraping for prospect identification at scale.",
         tags: ["AI Intent Classification", "CRM Pipeline", "Shopify API", "DM Automation", "Lead Scraping"],
-        highlight: "Currently building — active engagement"
+        highlight: "Wholesale on autopilot — inquiry to Shopify order"
     }
 ];
 
