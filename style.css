@@ -213,11 +213,12 @@ a {
     overflow: hidden;
     cursor: pointer;
     border: none;
+    transform: translateZ(0);
     transition: transform 0.2s ease;
 }
 
 .btn-colorful:hover {
-    transform: scale(1.03);
+    transform: scale(1.03) translateZ(0);
 }
 
 .btn-colorful__gradient {
