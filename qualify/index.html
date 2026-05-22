@@ -1137,6 +1137,15 @@
                     throw new Error(`Supabase ${res.status}: ${txt.slice(0, 120)}`);
                 }
 
+                // Fire the follow-up task (Gmail alert + 30 min re-engagement check).
+                // Fire-and-forget: if this fails the lead is still saved in Supabase,
+                // we just won't get the alert / re-engagement for this one row.
+                fetch('/api/trigger-lead-followup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ qualification_id: qualificationId })
+                }).catch((err) => console.warn('[qualify] follow-up trigger failed:', err));
+
                 sessionStorage.removeItem(STORAGE_KEY);
 
                 // Build the Calendly URL with ALL prefill via URL params (more reliable than the
