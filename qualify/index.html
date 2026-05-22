@@ -675,17 +675,20 @@
 
         .calendly-embed__widget {
             width: 100%;
-            min-height: 720px;
+            height: 760px;
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border);
             background: var(--surface);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            position: relative;
         }
 
-        .calendly-embed__widget .calendly-inline-widget {
-            min-height: 720px;
+        .calendly-embed__widget .calendly-inline-widget,
+        .calendly-embed__widget iframe {
+            width: 100% !important;
+            height: 100% !important;
+            min-width: 320px;
+            border: 0;
         }
 
         .calendly-embed__loading {
@@ -715,8 +718,7 @@
             .qualify { gap: 24px; }
             .qualify.is-booking { gap: 16px; }
             .calendly-embed__heading { font-size: 28px; }
-            .calendly-embed__widget,
-            .calendly-embed__widget .calendly-inline-widget,
+            .calendly-embed__widget { height: 700px; }
             .calendly-embed__loading { min-height: 680px; }
             .qualify__form { min-height: 320px; }
             .step__heading { font-size: 32px; }
@@ -1137,6 +1139,24 @@
 
                 sessionStorage.removeItem(STORAGE_KEY);
 
+                // Build the Calendly URL with ALL prefill via URL params (more reliable than the
+                // programmatic customAnswers API which can fail silently on custom-question mismatch)
+                const calendlyUrl = `${CALENDLY_URL}?` + new URLSearchParams({
+                    name: payload.full_name,
+                    email: payload.email,
+                    a1: payload.business_name,
+                    a2: payload.company_size,
+                    a3: payload.primary_bottleneck,
+                    a4: payload.timeline,
+                    a5: payload.business_description,
+                    utm_source: 'qualify_flow',
+                    utm_content: qualificationId,
+                    background_color: '0a0a0a',
+                    text_color: 'ffffff',
+                    primary_color: '7B61FF',
+                    hide_gdpr_banner: '1'
+                }).toString();
+
                 // Swap form for inline Calendly embed — no redirect, stays on blacksmith-ind.com
                 document.querySelector('.qualify__header').hidden = true;
                 document.querySelector('.qualify__form').hidden = true;
@@ -1145,55 +1165,39 @@
                 document.getElementById('calendly_embed').hidden = false;
                 document.getElementById('calendly_embed').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-                const embedUrl = `${CALENDLY_URL}?background_color=0a0a0a&text_color=ffffff&primary_color=7B61FF&hide_gdpr_banner=1`;
+                const wrap = document.getElementById('calendly_inline_wrap');
 
                 function mountCalendly() {
-                    if (!window.Calendly) return false;
-                    document.getElementById('calendly_loading').remove();
-                    window.Calendly.initInlineWidget({
-                        url: embedUrl,
-                        parentElement: document.getElementById('calendly_inline_wrap'),
-                        prefill: {
-                            name: payload.full_name,
-                            email: payload.email,
-                            customAnswers: {
-                                a1: payload.business_name,
-                                a2: payload.company_size,
-                                a3: payload.primary_bottleneck,
-                                a4: payload.timeline,
-                                a5: payload.business_description
-                            }
-                        },
-                        utm: { utmSource: 'qualify_flow', utmContent: qualificationId }
-                    });
-                    return true;
+                    if (!window.Calendly || typeof window.Calendly.initInlineWidget !== 'function') {
+                        return false;
+                    }
+                    const loading = document.getElementById('calendly_loading');
+                    if (loading) loading.remove();
+                    try {
+                        window.Calendly.initInlineWidget({
+                            url: calendlyUrl,
+                            parentElement: wrap
+                        });
+                        console.log('[qualify] Calendly inline widget mounted');
+                        return true;
+                    } catch (e) {
+                        console.error('[qualify] Calendly initInlineWidget threw:', e);
+                        return false;
+                    }
                 }
 
                 if (!mountCalendly()) {
+                    console.log('[qualify] Calendly script not ready yet, polling…');
                     const start = Date.now();
                     const poll = setInterval(() => {
                         if (mountCalendly()) {
                             clearInterval(poll);
                         } else if (Date.now() - start > 8000) {
-                            // Script didn't load — fall back to a direct navigation so the user can still book
                             clearInterval(poll);
-                            const params = new URLSearchParams({
-                                name: payload.full_name,
-                                email: payload.email,
-                                a1: payload.business_name,
-                                a2: payload.company_size,
-                                a3: payload.primary_bottleneck,
-                                a4: payload.timeline,
-                                a5: payload.business_description,
-                                utm_source: 'qualify_flow',
-                                utm_content: qualificationId,
-                                background_color: '0a0a0a',
-                                text_color: 'ffffff',
-                                primary_color: '7B61FF'
-                            });
-                            window.location.replace(`${CALENDLY_URL}?${params.toString()}`);
+                            console.warn('[qualify] Calendly never loaded, falling back to redirect');
+                            window.location.replace(calendlyUrl);
                         }
-                    }, 150);
+                    }, 200);
                 }
             } catch (err) {
                 console.error(err);
