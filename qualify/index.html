@@ -75,6 +75,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 28px 20px 32px;
         }
 
@@ -83,10 +84,10 @@
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(123, 97, 255, 0.22), transparent 70%),
-                radial-gradient(ellipse 80% 60% at 50% 100%, rgba(61, 43, 147, 0.18), transparent 60%),
-                radial-gradient(circle at 20% 40%, rgba(168, 85, 247, 0.08), transparent 50%),
-                radial-gradient(circle at 80% 60%, rgba(99, 102, 241, 0.08), transparent 50%);
+                radial-gradient(ellipse 50% 40% at 50% 0%, rgba(123, 97, 255, 0.10), transparent 70%),
+                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(61, 43, 147, 0.08), transparent 60%),
+                radial-gradient(circle at 20% 40%, rgba(168, 85, 247, 0.035), transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(99, 102, 241, 0.035), transparent 50%);
             z-index: -2;
             pointer-events: none;
             animation: aurora 24s ease-in-out infinite;
@@ -101,7 +102,7 @@
                 linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
                 url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
             background-size: 56px 56px, 56px 56px, 180px 180px;
-            opacity: 0.55;
+            opacity: 0.35;
             z-index: -1;
             pointer-events: none;
             mix-blend-mode: overlay;
@@ -119,7 +120,8 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
-            animation: pageIn 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            margin: auto 0;
+            animation: pageIn 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         @keyframes pageIn {
@@ -189,14 +191,11 @@
             background: var(--gradient-cta);
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+            transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .progress__dot.is-done::after { transform: scaleX(1); }
-        .progress__dot.is-current::after {
-            transform: scaleX(0.5);
-            background: linear-gradient(90deg, #6366f1, #a855f7);
-        }
+        .progress__dot.is-done::after,
+        .progress__dot.is-current::after { transform: scaleX(1); }
 
         .progress__label {
             font-family: 'Inter', sans-serif;
@@ -223,11 +222,11 @@
         .step[hidden] { display: none; }
 
         .step.is-entering {
-            animation: stepIn 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: stepIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .step.is-entering-back {
-            animation: stepInBack 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+            animation: stepInBack 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         @keyframes stepIn {
@@ -945,10 +944,6 @@
                         b.classList.toggle('is-selected', b === btn);
                     });
                     updateNextButton();
-                    // Auto-advance on single-select pills/cards (with a beat for the eye)
-                    if (isStepValid(state.step) && state.step < TOTAL_STEPS) {
-                        setTimeout(goNext, 280);
-                    }
                 });
             });
         }
@@ -1054,7 +1049,10 @@
                     a4: payload.timeline,
                     a5: payload.business_description,
                     utm_source: 'qualify_flow',
-                    utm_content: qualificationId
+                    utm_content: qualificationId,
+                    background_color: '0a0a0a',
+                    text_color: 'ffffff',
+                    primary_color: '7B61FF'
                 });
 
                 window.location.replace(`${CALENDLY_URL}?${calendlyParams.toString()}`);
