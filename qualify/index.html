@@ -28,6 +28,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
     <style>
         :root {
             --black: #000000;
@@ -633,10 +636,88 @@
             margin-top: 4px;
         }
 
+        /* Inline Calendly embed (replaces redirect after submit) */
+        .qualify.is-booking {
+            max-width: 920px;
+            gap: 20px;
+        }
+
+        .calendly-embed {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            animation: stepIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .calendly-embed[hidden] { display: none; }
+
+        .calendly-embed__heading {
+            font-family: 'Anton', 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 36px;
+            line-height: 1.05;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            max-width: 24ch;
+        }
+
+        .calendly-embed__helper {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--gray);
+            margin-top: -10px;
+            max-width: 60ch;
+        }
+
+        .calendly-embed__widget {
+            width: 100%;
+            min-height: 720px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .calendly-embed__widget .calendly-inline-widget {
+            min-height: 720px;
+        }
+
+        .calendly-embed__loading {
+            display: grid;
+            place-items: center;
+            min-height: 720px;
+            color: var(--gray);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            gap: 14px;
+        }
+
+        .calendly-embed__loading .spinner {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-top-color: var(--purple);
+            border-radius: 50%;
+            animation: spin 700ms linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         /* Mobile */
         @media (max-width: 560px) {
             body { padding: 20px 18px 24px; }
             .qualify { gap: 24px; }
+            .qualify.is-booking { gap: 16px; }
+            .calendly-embed__heading { font-size: 28px; }
+            .calendly-embed__widget,
+            .calendly-embed__widget .calendly-inline-widget,
+            .calendly-embed__loading { min-height: 680px; }
             .qualify__form { min-height: 320px; }
             .step__heading { font-size: 32px; }
             .step__helper { font-size: 14px; }
@@ -797,6 +878,17 @@
             <span id="error_message">Something went wrong. Your answers are saved.</span>
             <button type="button" id="retry">Try again</button>
         </div>
+
+        <section class="calendly-embed" id="calendly_embed" hidden>
+            <h2 class="calendly-embed__heading">Pick a time that works for you</h2>
+            <p class="calendly-embed__helper">Your answers are saved. I'll see them before our call so we can skip the small talk and get straight into your roadmap.</p>
+            <div class="calendly-embed__widget" id="calendly_inline_wrap">
+                <div class="calendly-embed__loading" id="calendly_loading">
+                    <div class="spinner"></div>
+                    <span>Loading your booking calendar…</span>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -944,6 +1036,11 @@
                         b.classList.toggle('is-selected', b === btn);
                     });
                     updateNextButton();
+                    // Auto-advance on single-select pills/cards — small beat so the
+                    // selection state is visible before the slide-in of the next step.
+                    if (isStepValid(state.step) && state.step < TOTAL_STEPS) {
+                        setTimeout(goNext, 420);
+                    }
                 });
             });
         }
@@ -1040,22 +1137,64 @@
 
                 sessionStorage.removeItem(STORAGE_KEY);
 
-                const calendlyParams = new URLSearchParams({
-                    name: payload.full_name,
-                    email: payload.email,
-                    a1: payload.business_name,
-                    a2: payload.company_size,
-                    a3: payload.primary_bottleneck,
-                    a4: payload.timeline,
-                    a5: payload.business_description,
-                    utm_source: 'qualify_flow',
-                    utm_content: qualificationId,
-                    background_color: '0a0a0a',
-                    text_color: 'ffffff',
-                    primary_color: '7B61FF'
-                });
+                // Swap form for inline Calendly embed — no redirect, stays on blacksmith-ind.com
+                document.querySelector('.qualify__header').hidden = true;
+                document.querySelector('.qualify__form').hidden = true;
+                document.querySelector('.qualify__footer').hidden = true;
+                document.querySelector('.qualify').classList.add('is-booking');
+                document.getElementById('calendly_embed').hidden = false;
+                document.getElementById('calendly_embed').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-                window.location.replace(`${CALENDLY_URL}?${calendlyParams.toString()}`);
+                const embedUrl = `${CALENDLY_URL}?background_color=0a0a0a&text_color=ffffff&primary_color=7B61FF&hide_gdpr_banner=1`;
+
+                function mountCalendly() {
+                    if (!window.Calendly) return false;
+                    document.getElementById('calendly_loading').remove();
+                    window.Calendly.initInlineWidget({
+                        url: embedUrl,
+                        parentElement: document.getElementById('calendly_inline_wrap'),
+                        prefill: {
+                            name: payload.full_name,
+                            email: payload.email,
+                            customAnswers: {
+                                a1: payload.business_name,
+                                a2: payload.company_size,
+                                a3: payload.primary_bottleneck,
+                                a4: payload.timeline,
+                                a5: payload.business_description
+                            }
+                        },
+                        utm: { utmSource: 'qualify_flow', utmContent: qualificationId }
+                    });
+                    return true;
+                }
+
+                if (!mountCalendly()) {
+                    const start = Date.now();
+                    const poll = setInterval(() => {
+                        if (mountCalendly()) {
+                            clearInterval(poll);
+                        } else if (Date.now() - start > 8000) {
+                            // Script didn't load — fall back to a direct navigation so the user can still book
+                            clearInterval(poll);
+                            const params = new URLSearchParams({
+                                name: payload.full_name,
+                                email: payload.email,
+                                a1: payload.business_name,
+                                a2: payload.company_size,
+                                a3: payload.primary_bottleneck,
+                                a4: payload.timeline,
+                                a5: payload.business_description,
+                                utm_source: 'qualify_flow',
+                                utm_content: qualificationId,
+                                background_color: '0a0a0a',
+                                text_color: 'ffffff',
+                                primary_color: '7B61FF'
+                            });
+                            window.location.replace(`${CALENDLY_URL}?${params.toString()}`);
+                        }
+                    }, 150);
+                }
             } catch (err) {
                 console.error(err);
                 els.next.classList.remove('is-loading');
