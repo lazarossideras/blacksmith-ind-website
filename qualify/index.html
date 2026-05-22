@@ -1036,10 +1036,10 @@
                         b.classList.toggle('is-selected', b === btn);
                     });
                     updateNextButton();
-                    // Auto-advance on single-select pills/cards — small beat so the
-                    // selection state is visible before the slide-in of the next step.
+                    // Auto-advance on single-select pills/cards — gives a beat so the
+                    // selection animation completes and the choice clearly registers.
                     if (isStepValid(state.step) && state.step < TOTAL_STEPS) {
-                        setTimeout(goNext, 420);
+                        setTimeout(goNext, 750);
                     }
                 });
             });
