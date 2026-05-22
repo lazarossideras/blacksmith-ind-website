@@ -846,7 +846,7 @@
             </section>
 
             <section class="step" data-step="5" hidden>
-                <h1 class="step__heading">Last bit &mdash; who are you?</h1>
+                <h1 class="step__heading">Last bit - who are you?</h1>
                 <p class="step__helper">I'll send your AI roadmap to this email and prep your call brief.</p>
                 <div class="field">
                     <label class="field__label" for="full_name">Full name</label>
@@ -895,7 +895,7 @@
 
     <script>
         // Supabase project blacksmith-leads (ref lhslbqxqqvyczputpoyi)
-        // Publishable key is safe in the browser — RLS only allows INSERT for the anon role.
+        // Publishable key is safe in the browser - RLS only allows INSERT for the anon role.
         const SUPABASE_URL = 'https://lhslbqxqqvyczputpoyi.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_hKU0yFRJcDliPNu2qnJKuQ_MFOMCt6y';
         const CALENDLY_URL = 'https://calendly.com/l-sideras-blacksmith-ind/30min';
@@ -1038,7 +1038,7 @@
                         b.classList.toggle('is-selected', b === btn);
                     });
                     updateNextButton();
-                    // Auto-advance on single-select pills/cards — gives a beat so the
+                    // Auto-advance on single-select pills/cards - gives a beat so the
                     // selection animation completes and the choice clearly registers.
                     if (isStepValid(state.step) && state.step < TOTAL_STEPS) {
                         setTimeout(goNext, 750);
@@ -1157,7 +1157,7 @@
                     hide_gdpr_banner: '1'
                 }).toString();
 
-                // Swap form for inline Calendly embed — no redirect, stays on blacksmith-ind.com
+                // Swap form for inline Calendly embed - no redirect, stays on blacksmith-ind.com
                 document.querySelector('.qualify__header').hidden = true;
                 document.querySelector('.qualify__form').hidden = true;
                 document.querySelector('.qualify__footer').hidden = true;
@@ -1203,7 +1203,7 @@
                 console.error(err);
                 els.next.classList.remove('is-loading');
                 els.next.disabled = false;
-                els.errorMessage.textContent = "Couldn't save your answers. Your progress is safe — try again?";
+                els.errorMessage.textContent = "Couldn't save your answers. Your progress is safe, try again?";
                 els.errorBanner.hidden = false;
             }
         }
