@@ -28,9 +28,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-
     <style>
         :root {
             --black: #000000;
@@ -881,16 +878,6 @@
             <button type="button" id="retry">Try again</button>
         </div>
 
-        <section class="calendly-embed" id="calendly_embed" hidden>
-            <h2 class="calendly-embed__heading">Pick a time that works for you</h2>
-            <p class="calendly-embed__helper">Your answers are saved. I'll see them before our call so we can skip the small talk and get straight into your roadmap.</p>
-            <div class="calendly-embed__widget" id="calendly_inline_wrap">
-                <div class="calendly-embed__loading" id="calendly_loading">
-                    <div class="spinner"></div>
-                    <span>Loading your booking calendar…</span>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script>
@@ -1148,8 +1135,7 @@
 
                 sessionStorage.removeItem(STORAGE_KEY);
 
-                // Build the Calendly URL with ALL prefill via URL params (more reliable than the
-                // programmatic customAnswers API which can fail silently on custom-question mismatch)
+                // Build the Calendly URL with all prefill via URL params
                 const calendlyUrl = `${CALENDLY_URL}?` + new URLSearchParams({
                     name: payload.full_name,
                     email: payload.email,
@@ -1166,48 +1152,7 @@
                     hide_gdpr_banner: '1'
                 }).toString();
 
-                // Swap form for inline Calendly embed - no redirect, stays on blacksmith-ind.com
-                document.querySelector('.qualify__header').hidden = true;
-                document.querySelector('.qualify__form').hidden = true;
-                document.querySelector('.qualify__footer').hidden = true;
-                document.querySelector('.qualify').classList.add('is-booking');
-                document.getElementById('calendly_embed').hidden = false;
-                document.getElementById('calendly_embed').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                const wrap = document.getElementById('calendly_inline_wrap');
-
-                function mountCalendly() {
-                    if (!window.Calendly || typeof window.Calendly.initInlineWidget !== 'function') {
-                        return false;
-                    }
-                    const loading = document.getElementById('calendly_loading');
-                    if (loading) loading.remove();
-                    try {
-                        window.Calendly.initInlineWidget({
-                            url: calendlyUrl,
-                            parentElement: wrap
-                        });
-                        console.log('[qualify] Calendly inline widget mounted');
-                        return true;
-                    } catch (e) {
-                        console.error('[qualify] Calendly initInlineWidget threw:', e);
-                        return false;
-                    }
-                }
-
-                if (!mountCalendly()) {
-                    console.log('[qualify] Calendly script not ready yet, polling…');
-                    const start = Date.now();
-                    const poll = setInterval(() => {
-                        if (mountCalendly()) {
-                            clearInterval(poll);
-                        } else if (Date.now() - start > 8000) {
-                            clearInterval(poll);
-                            console.warn('[qualify] Calendly never loaded, falling back to redirect');
-                            window.location.replace(calendlyUrl);
-                        }
-                    }, 200);
-                }
+                window.location.replace(calendlyUrl);
             } catch (err) {
                 console.error(err);
                 els.next.classList.remove('is-loading');
