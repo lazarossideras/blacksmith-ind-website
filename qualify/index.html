@@ -1135,15 +1135,12 @@
 
                 sessionStorage.removeItem(STORAGE_KEY);
 
-                // Build the Calendly URL with all prefill via URL params
+                // Calendly custom questions were removed - only name + email + tracking remain.
+                // utm_content carries the qualification id so the Calendly webhook can link
+                // the booking back to the Supabase row.
                 const calendlyUrl = `${CALENDLY_URL}?` + new URLSearchParams({
                     name: payload.full_name,
                     email: payload.email,
-                    a1: payload.business_name,
-                    a2: payload.company_size,
-                    a3: payload.primary_bottleneck,
-                    a4: payload.timeline,
-                    a5: payload.business_description,
                     utm_source: 'qualify_flow',
                     utm_content: qualificationId,
                     background_color: '0a0a0a',
