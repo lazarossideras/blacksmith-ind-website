@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <title>Contact Us | Blacksmith Industries</title>
+    <meta name="description" content="Drop Lazaros a line. Replies within one business day.">
+    <link rel="canonical" href="https://blacksmith-ind.com/contact">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Contact Us | Blacksmith Industries">
+    <meta property="og:description" content="Drop Lazaros a line. Replies within one business day.">
+    <meta property="og:url" content="https://blacksmith-ind.com/contact">
+    <meta property="og:image" content="https://blacksmith-ind.com/lazaros-pfp.png">
+    <meta property="og:site_name" content="Blacksmith Industries">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contact Us | Blacksmith Industries">
+    <meta name="twitter:description" content="Drop Lazaros a line. Replies within one business day.">
+    <meta name="twitter:image" content="https://blacksmith-ind.com/lazaros-pfp.png">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #000000;
+            --dark: #0a0a0a;
+            --dark-2: #141414;
+            --white: #ffffff;
+            --gray: #8a8a8a;
+            --gray-2: #5a5a5a;
+            --purple-dark: #3D2B93;
+            --purple: #7B61FF;
+            --purple-light: #a78bff;
+            --purple-glow: rgba(123, 97, 255, 0.18);
+            --purple-glow-strong: rgba(123, 97, 255, 0.38);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
+            --border-hover: rgba(123, 97, 255, 0.45);
+            --border-active: rgba(123, 97, 255, 0.85);
+            --surface: rgba(20, 20, 20, 0.6);
+            --surface-strong: rgba(28, 24, 48, 0.8);
+            --danger: #f87171;
+            --gradient-cta: linear-gradient(110deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 20px 32px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(123, 97, 255, 0.22), transparent 70%),
+                radial-gradient(ellipse 80% 60% at 50% 100%, rgba(61, 43, 147, 0.18), transparent 60%),
+                radial-gradient(circle at 20% 40%, rgba(168, 85, 247, 0.08), transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(99, 102, 241, 0.08), transparent 50%);
+            z-index: -2;
+            pointer-events: none;
+            animation: aurora 24s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+                url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            background-size: 56px 56px, 56px 56px, 180px 180px;
+            opacity: 0.55;
+            z-index: -1;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        @keyframes aurora {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(0, -30px, 0) scale(1.05); }
+        }
+
+        /* Layout */
+        .contact {
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin: auto 0;
+            animation: pageIn 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact__header {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--gray);
+            text-decoration: none;
+            text-transform: uppercase;
+            width: fit-content;
+            transition: color 220ms ease, transform 220ms ease;
+        }
+
+        .back-home:hover {
+            color: var(--purple-light);
+            transform: translateX(-2px);
+        }
+
+        .back-home svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .contact__intro {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact__heading {
+            font-family: 'Anton', 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 48px;
+            line-height: 1.02;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            max-width: 18ch;
+        }
+
+        .contact__helper {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--gray);
+            max-width: 52ch;
+        }
+
+        .contact__form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Inputs */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .field__label {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .field__optional {
+            color: var(--gray-2);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0.04em;
+            margin-left: 6px;
+        }
+
+        .field__input {
+            width: 100%;
+            min-height: 54px;
+            padding: 16px 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--white);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+        }
+
+        .field__input::placeholder {
+            color: var(--gray-2);
+            font-weight: 400;
+        }
+
+        .field__input:hover {
+            border-color: var(--border-strong);
+        }
+
+        .field__input:focus {
+            outline: none;
+            border-color: var(--border-active);
+            background: var(--surface-strong);
+            box-shadow: 0 0 0 4px rgba(123, 97, 255, 0.12);
+        }
+
+        .field__input.is-invalid {
+            border-color: rgba(248, 113, 113, 0.6);
+        }
+
+        .field__input--textarea {
+            min-height: 160px;
+            padding: 16px 18px 44px;
+            resize: vertical;
+            line-height: 1.55;
+        }
+
+        .field--with-counter .field__counter {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--gray-2);
+            background: rgba(10, 10, 10, 0.6);
+            padding: 3px 8px;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        .field__counter.is-near { color: var(--purple-light); }
+        .field__counter.is-over { color: var(--danger); }
+
+        .field__error {
+            font-family: 'Inter', sans-serif;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--danger);
+            min-height: 16px;
+        }
+
+        /* Submit button */
+        .btn {
+            min-height: 52px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+                        opacity 220ms ease,
+                        box-shadow 220ms ease,
+                        background 220ms ease,
+                        border-color 220ms ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--purple-light);
+            outline-offset: 3px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-cta);
+            color: var(--white);
+            box-shadow: 0 8px 28px rgba(168, 85, 247, 0.28),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            min-width: 200px;
+            align-self: flex-start;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(168, 85, 247, 0.45),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+
+        .btn-primary:disabled {
+            cursor: not-allowed;
+            opacity: 0.4;
+            box-shadow: none;
+            filter: grayscale(0.3);
+        }
+
+        .btn-primary.is-loading {
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn-primary.is-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 18px;
+            height: 18px;
+            margin: -9px 0 0 -9px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--white);
+            animation: spin 700ms linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error banner */
+        .error-banner {
+            margin-top: 4px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(248, 113, 113, 0.35);
+            background: rgba(248, 113, 113, 0.08);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .error-banner[hidden] { display: none; }
+
+        .error-banner button {
+            background: transparent;
+            color: var(--purple-light);
+            border: none;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .error-banner button:hover { background: rgba(123, 97, 255, 0.1); }
+
+        /* Success state */
+        .contact.is-submitted .contact__form,
+        .contact.is-submitted .contact__intro,
+        .contact.is-submitted .error-banner { display: none; }
+
+        .success {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            animation: pageIn 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .success[hidden] { display: none; }
+
+        .success__icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(168, 85, 247, 0.22));
+            border: 1px solid rgba(123, 97, 255, 0.55);
+            color: var(--purple-light);
+            box-shadow: 0 8px 28px var(--purple-glow);
+        }
+
+        .success__icon svg { width: 28px; height: 28px; }
+
+        .success__heading {
+            font-family: 'Anton', 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 40px;
+            line-height: 1.02;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .success__helper {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--gray);
+            max-width: 54ch;
+        }
+
+        .success__helper a {
+            color: var(--purple-light);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(167, 139, 255, 0.35);
+            transition: color 200ms ease, border-color 200ms ease;
+        }
+
+        .success__helper a:hover {
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+            body { padding: 20px 18px 24px; }
+            .contact { gap: 24px; }
+            .contact__heading { font-size: 36px; }
+            .success__heading { font-size: 30px; }
+            .btn { padding: 14px 18px; font-size: 14.5px; }
+            .btn-primary { min-width: 0; width: 100%; align-self: stretch; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="contact">
+        <header class="contact__header">
+            <a href="/" class="back-home" aria-label="Back to Blacksmith Industries home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                <span>Blacksmith Industries</span>
+            </a>
+        </header>
+
+        <section class="contact__intro">
+            <h1 class="contact__heading">Get in touch.</h1>
+            <p class="contact__helper">Quickest way to reach me directly. I read every message and reply within one business day.</p>
+        </section>
+
+        <form class="contact__form" id="form" autocomplete="on" novalidate>
+            <div class="field">
+                <label class="field__label" for="full_name">Full name</label>
+                <input type="text" class="field__input" id="full_name" autocomplete="name" required>
+            </div>
+            <div class="field">
+                <label class="field__label" for="email">Email</label>
+                <input type="email" class="field__input" id="email" autocomplete="email" required>
+                <span class="field__error" id="email_error"></span>
+            </div>
+            <div class="field">
+                <label class="field__label" for="business_name">Business <span class="field__optional">(optional)</span></label>
+                <input type="text" class="field__input" id="business_name" autocomplete="organization">
+            </div>
+            <div class="field field--with-counter">
+                <label class="field__label" for="message">Message</label>
+                <textarea class="field__input field__input--textarea" id="message" maxlength="2000" rows="6" placeholder="Tell me what you're working on..." required></textarea>
+                <span class="field__counter" id="char_counter"><span id="char_count">0</span>/2000</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submit" disabled>
+                <span id="submit_label">Send message</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+        </form>
+
+        <div class="error-banner" id="error_banner" hidden role="alert">
+            <span id="error_message">Couldn't send your message. Try again?</span>
+            <button type="button" id="retry">Try again</button>
+        </div>
+
+        <section class="success" id="success" hidden>
+            <div class="success__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+            </div>
+            <h2 class="success__heading">Message sent.</h2>
+            <p class="success__helper">Thanks for reaching out. I'll reply within one business day. If you want to go deeper, you can also <a href="/qualify?src=contact_success">book a free 30-minute AI roadmap call</a> or <a href="/">head back home</a>.</p>
+        </section>
+    </main>
+
+    <script>
+        // Supabase project blacksmith-leads (ref lhslbqxqqvyczputpoyi)
+        // Publishable key is safe in the browser - RLS only allows INSERT for the anon role.
+        const SUPABASE_URL = 'https://lhslbqxqqvyczputpoyi.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_hKU0yFRJcDliPNu2qnJKuQ_MFOMCt6y';
+
+        const $ = (sel) => document.querySelector(sel);
+
+        const els = {
+            container: $('.contact'),
+            form: $('#form'),
+            fullName: $('#full_name'),
+            email: $('#email'),
+            emailError: $('#email_error'),
+            businessName: $('#business_name'),
+            message: $('#message'),
+            charCount: $('#char_count'),
+            charCounter: $('#char_counter'),
+            submit: $('#submit'),
+            success: $('#success'),
+            errorBanner: $('#error_banner'),
+            errorMessage: $('#error_message'),
+            retry: $('#retry')
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const SOURCE = urlParams.get('src') || 'direct';
+
+        const state = {
+            full_name: '',
+            email: '',
+            business_name: '',
+            message: ''
+        };
+
+        function isEmail(v) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+        }
+
+        function isValid() {
+            return state.full_name.trim().length >= 2
+                && isEmail(state.email)
+                && state.message.trim().length >= 5
+                && state.message.length <= 2000;
+        }
+
+        function updateSubmit() {
+            els.submit.disabled = !isValid();
+        }
+
+        function updateCharCount() {
+            const len = state.message.length;
+            els.charCount.textContent = String(len);
+            els.charCounter.classList.toggle('is-near', len >= 1600 && len < 2000);
+            els.charCounter.classList.toggle('is-over', len >= 2000);
+        }
+
+        els.fullName.addEventListener('input', (e) => {
+            state.full_name = e.target.value;
+            updateSubmit();
+        });
+
+        els.email.addEventListener('input', (e) => {
+            state.email = e.target.value;
+            els.email.classList.remove('is-invalid');
+            els.emailError.textContent = '';
+            updateSubmit();
+        });
+
+        els.email.addEventListener('blur', () => {
+            if (state.email && !isEmail(state.email)) {
+                els.email.classList.add('is-invalid');
+                els.emailError.textContent = "That doesn't look like a valid email.";
+            }
+        });
+
+        els.businessName.addEventListener('input', (e) => {
+            state.business_name = e.target.value;
+            updateSubmit();
+        });
+
+        els.message.addEventListener('input', (e) => {
+            state.message = e.target.value;
+            updateCharCount();
+            updateSubmit();
+        });
+
+        async function submit(evt) {
+            if (evt) evt.preventDefault();
+            if (!isValid()) return;
+
+            els.submit.classList.add('is-loading');
+            els.submit.disabled = true;
+            els.errorBanner.hidden = true;
+
+            const contactId = (crypto.randomUUID && crypto.randomUUID())
+                || ('c-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+
+            const payload = {
+                id: contactId,
+                full_name: state.full_name.trim(),
+                email: state.email.trim().toLowerCase(),
+                business_name: state.business_name.trim() || null,
+                message: state.message.trim(),
+                source: SOURCE,
+                user_agent: navigator.userAgent,
+                referrer: document.referrer || null
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_messages`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) {
+                    const txt = await res.text().catch(() => '');
+                    throw new Error(`Supabase ${res.status}: ${txt.slice(0, 120)}`);
+                }
+
+                // Fire the follow-up task (Gmail alert to Lazaros).
+                // Fire-and-forget: if this fails, the message is still saved in Supabase.
+                fetch('/api/trigger-contact-message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contact_id: contactId })
+                }).catch((err) => console.warn('[contact] follow-up trigger failed:', err));
+
+                els.container.classList.add('is-submitted');
+                els.success.hidden = false;
+                els.success.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                console.error(err);
+                els.submit.classList.remove('is-loading');
+                els.submit.disabled = false;
+                els.errorMessage.textContent = "Couldn't send your message. Try again?";
+                els.errorBanner.hidden = false;
+            }
+        }
+
+        els.form.addEventListener('submit', submit);
+        els.retry.addEventListener('click', () => { els.errorBanner.hidden = true; submit(); });
+
+        updateCharCount();
+        updateSubmit();
+    </script>
+</body>
+</html>
