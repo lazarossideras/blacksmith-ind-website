@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blacksmith Core · Lead Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --dark: #0a0a0a;
+            --dark-2: #141414;
+            --white: #ffffff;
+            --gray: #8a8a8a;
+            --gray-2: #5a5a5a;
+            --purple-dark: #3D2B93;
+            --purple: #7B61FF;
+            --purple-light: #a78bff;
+            --purple-glow: rgba(123, 97, 255, 0.18);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
+            --border-active: rgba(123, 97, 255, 0.55);
+            --surface: rgba(20, 20, 20, 0.7);
+            --surface-strong: rgba(28, 24, 48, 0.8);
+            --status-submitted: #fbbf24;
+            --status-booked: #34d399;
+            --status-cancelled: #f87171;
+            --status-no_show: #fb7185;
+            --status-completed: #60a5fa;
+            --status-disqualified: #9ca3af;
+            --status-sent: #34d399;
+            --status-failed: #f87171;
+            --gradient-cta: linear-gradient(110deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        [hidden] { display: none !important; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            padding: 24px 28px 48px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 30% at 50% 0%, rgba(123, 97, 255, 0.15), transparent 70%),
+                radial-gradient(ellipse 40% 30% at 90% 100%, rgba(168, 85, 247, 0.08), transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ===== Login overlay ===== */
+        .login {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background: var(--dark);
+            z-index: 200;
+            padding: 24px;
+        }
+        .login__card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 28px;
+            backdrop-filter: blur(12px);
+        }
+        .login__title {
+            font-family: 'Anton', sans-serif;
+            font-size: 30px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffffff, #c4c4c4);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        .login__sub {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+        .login__field { margin-bottom: 14px; }
+        .login__label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+        .login__input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+        .login__input:focus {
+            outline: none;
+            border-color: var(--border-active);
+            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.12);
+        }
+        .login__btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--gradient-cta);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease;
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.28);
+        }
+        .login__btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(168, 85, 247, 0.4); }
+        .login__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .login__error {
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--status-cancelled);
+            min-height: 18px;
+        }
+
+        /* ===== Top bar ===== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .brand { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+        .brand__title {
+            font-family: 'Anton', sans-serif;
+            font-size: 34px;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            line-height: 1;
+            background: linear-gradient(180deg, #ffffff, #c4c4c4);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brand__tag {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--purple-light);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(123, 97, 255, 0.06);
+        }
+        .topbar__meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--gray);
+        }
+        .topbar__meta .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--status-booked);
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .topbar__meta .dot.is-error { background: var(--status-cancelled); box-shadow: 0 0 8px rgba(248, 113, 113, 0.5); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-strong);
+            background: var(--surface);
+            color: var(--white);
+            cursor: pointer;
+            transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { border-color: var(--border-active); background: var(--surface-strong); transform: translateY(-1px); }
+        .btn svg { width: 14px; height: 14px; }
+
+        /* ===== Tabs ===== */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 180ms ease, border-color 180ms ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab:hover { color: var(--white); }
+        .tab.is-active { color: var(--white); border-bottom-color: var(--purple); }
+        .tab__count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-2);
+            background: rgba(255,255,255,0.05);
+            padding: 1px 7px;
+            border-radius: 10px;
+        }
+
+        /* ===== Stats ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat {
+            padding: 16px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            backdrop-filter: blur(12px);
+        }
+        .stat__label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+        .stat__value {
+            font-family: 'Anton', sans-serif;
+            font-size: 30px;
+            letter-spacing: 0.02em;
+            line-height: 1;
+        }
+        .stat__value--accent {
+            background: linear-gradient(120deg, #a855f7, #ec4899);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== Filters ===== */
+        .filters {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .search { flex: 1; min-width: 200px; position: relative; }
+        .search input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            background: rgba(10, 10, 10, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 13px;
+            transition: border-color 180ms ease;
+        }
+        .search input:focus { outline: none; border-color: var(--border-active); box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1); }
+        .search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--gray-2); pointer-events: none; }
+
+        /* ===== Table ===== */
+        .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .table-scroll { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px; }
+        thead { background: rgba(10, 10, 10, 0.6); border-bottom: 1px solid var(--border); }
+        th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); padding: 12px 14px; white-space: nowrap; }
+        tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.04); cursor: pointer; transition: background 160ms ease; }
+        tbody tr:hover { background: rgba(123, 97, 255, 0.06); }
+        tbody tr.is-highlight { background: rgba(123, 97, 255, 0.16); animation: flash 2s ease; }
+        @keyframes flash { 0% { background: rgba(123, 97, 255, 0.4); } 100% { background: rgba(123, 97, 255, 0.16); } }
+        tbody tr:last-child { border-bottom: none; }
+        td { padding: 14px; vertical-align: middle; }
+        td .secondary { display: block; font-size: 12px; color: var(--gray-2); margin-top: 2px; }
+
+        .status {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+        }
+        .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status--submitted { color: var(--status-submitted); background: rgba(251, 191, 36, 0.1); }
+        .status--booked { color: var(--status-booked); background: rgba(52, 211, 153, 0.1); }
+        .status--cancelled { color: var(--status-cancelled); background: rgba(248, 113, 113, 0.1); }
+        .status--no_show { color: var(--status-no_show); background: rgba(251, 113, 133, 0.1); }
+        .status--completed { color: var(--status-completed); background: rgba(96, 165, 250, 0.1); }
+        .status--disqualified { color: var(--status-disqualified); background: rgba(156, 163, 175, 0.1); }
+        .status--sent { color: var(--status-sent); background: rgba(52, 211, 153, 0.1); }
+        .status--failed { color: var(--status-failed); background: rgba(248, 113, 113, 0.1); }
+
+        .empty { padding: 70px 20px; text-align: center; color: var(--gray); }
+        .empty__title { font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
+        .loading { padding: 60px 20px; text-align: center; color: var(--gray); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        .spinner { width: 22px; height: 22px; border: 2px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin 700ms linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== Drawer ===== */
+        .drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
+        .drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+        .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: var(--dark-2); border-left: 1px solid var(--border-strong); z-index: 101; transform: translateX(100%); transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1); overflow-y: auto; padding: 28px; }
+        .drawer.is-open { transform: translateX(0); }
+        .drawer__close { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--white); cursor: pointer; display: grid; place-items: center; }
+        .drawer__close:hover { border-color: var(--border-active); }
+        .drawer__close svg { width: 14px; height: 14px; }
+        .drawer h2 { font-family: 'Anton', sans-serif; font-size: 26px; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 4px; padding-right: 40px; }
+        .drawer .subhead { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gray); margin-bottom: 24px; word-break: break-all; }
+        .field-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .field-row__label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); padding-top: 2px; }
+        .field-row__value { font-size: 14px; color: var(--white); word-break: break-word; }
+        .field-row__value a { color: var(--purple-light); text-decoration: none; }
+        .field-row__value a:hover { text-decoration: underline; }
+        .field-row__value--mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gray); }
+        .field-row__value--msg { white-space: pre-wrap; }
+
+        .error-banner { margin: 16px 0; padding: 14px 18px; border-radius: 10px; border: 1px solid rgba(248, 113, 113, 0.35); background: rgba(248, 113, 113, 0.08); color: var(--white); font-size: 13px; }
+        .error-banner[hidden] { display: none; }
+
+        @media (max-width: 720px) {
+            body { padding: 16px; }
+            .brand__title { font-size: 26px; }
+            .field-row { grid-template-columns: 1fr; gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login" id="login">
+        <form class="login__card" id="login_form">
+            <h1 class="login__title">Blacksmith Core</h1>
+            <p class="login__sub">Sign in to the lead dashboard.</p>
+            <div class="login__field">
+                <label class="login__label" for="email">Email</label>
+                <input class="login__input" type="email" id="email" autocomplete="username" required>
+            </div>
+            <div class="login__field">
+                <label class="login__label" for="password">Password</label>
+                <input class="login__input" type="password" id="password" autocomplete="current-password" required>
+            </div>
+            <button class="login__btn" type="submit" id="login_btn">Sign in</button>
+            <div class="login__error" id="login_error"></div>
+        </form>
+    </div>
+
+    <!-- APP -->
+    <div id="app" hidden>
+        <header class="topbar">
+            <div class="brand">
+                <h1 class="brand__title">Blacksmith Core</h1>
+                <span class="brand__tag">Lead OS</span>
+            </div>
+            <div class="topbar__meta">
+                <span class="dot" id="conn_dot"></span>
+                <span id="conn_status">Connecting...</span>
+                <button class="btn" id="refresh">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M3 21v-5h5"/></svg>
+                    Refresh
+                </button>
+                <button class="btn" id="signout">Sign out</button>
+            </div>
+        </header>
+
+        <div class="error-banner" id="error" hidden></div>
+
+        <nav class="tabs" id="tabs">
+            <button class="tab is-active" data-tab="leads">Leads <span class="tab__count" id="count_leads">0</span></button>
+            <button class="tab" data-tab="contacts">Messages <span class="tab__count" id="count_contacts">0</span></button>
+            <button class="tab" data-tab="notifications">Notifications <span class="tab__count" id="count_notifications">0</span></button>
+        </nav>
+
+        <section class="stats" id="stats"></section>
+
+        <section class="filters" id="filters">
+            <div class="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <input type="search" id="search_input" placeholder="Search…" autocomplete="off">
+            </div>
+        </section>
+
+        <section class="table-wrap">
+            <div class="loading" id="loading"><div class="spinner"></div><span>Loading…</span></div>
+            <div class="table-scroll" id="table_scroll" hidden>
+                <table>
+                    <thead id="thead"></thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+            <div class="empty" id="empty" hidden>
+                <div class="empty__title">Nothing here yet</div>
+                <div id="empty_sub">Records will appear here as they come in.</div>
+            </div>
+        </section>
+    </div>
+
+    <div class="drawer-backdrop" id="drawer_backdrop"></div>
+    <aside class="drawer" id="drawer" aria-hidden="true">
+        <button class="drawer__close" id="drawer_close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div id="drawer_body"></div>
+    </aside>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+        // Publishable (anon) key is safe in the browser. RLS gives the authenticated
+        // role read access; anon can only INSERT. No service_role key here.
+        const SUPABASE_URL = 'https://lhslbqxqqvyczputpoyi.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hKU0yFRJcDliPNu2qnJKuQ_MFOMCt6y';
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+        const $ = (id) => document.getElementById(id);
+        const els = {
+            login: $('login'), loginForm: $('login_form'), email: $('email'),
+            password: $('password'), loginBtn: $('login_btn'), loginError: $('login_error'),
+            app: $('app'), signout: $('signout'), refresh: $('refresh'),
+            tabs: $('tabs'), stats: $('stats'), filters: $('filters'),
+            searchInput: $('search_input'), loading: $('loading'),
+            tableScroll: $('table_scroll'), thead: $('thead'), rows: $('rows'),
+            empty: $('empty'), emptySub: $('empty_sub'), error: $('error'),
+            connDot: $('conn_dot'), connStatus: $('conn_status'),
+            drawer: $('drawer'), drawerBackdrop: $('drawer_backdrop'),
+            drawerClose: $('drawer_close'), drawerBody: $('drawer_body')
+        };
+
+        const state = { tab: 'leads', search: '', data: { leads: [], contacts: [], notifications: [] } };
+
+        const LABELS = {
+            company_size: { just_me: 'Just me', '2_10': '2–10', '11_50': '11–50', '51_200': '51–200', '200_plus': '200+' },
+            primary_bottleneck: { more_leads: 'More leads', ops_efficiency: 'Ops inefficiency', scale_without_hiring: 'Scale without hiring', reclaim_time: 'Reclaim time', other: 'Other' },
+            timeline: { asap: 'ASAP', within_month: 'Within a month', within_quarter: 'Within a quarter', exploring: 'Exploring' },
+            event_type: { new_lead: 'New lead', new_contact: 'New message', booked: 'Booked', cancelled: 'Cancelled', no_book: 'No-book' }
+        };
+
+        const lbl = (group, v) => (v == null ? '-' : (LABELS[group]?.[v] ?? v));
+
+        function fmtDate(iso) {
+            if (!iso) return '-';
+            const d = new Date(iso), mins = Math.floor((Date.now() - d.getTime()) / 60000);
+            if (mins < 1) return 'just now';
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `${days}d ago`;
+            return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        function fmtFull(iso) {
+            if (!iso) return '-';
+            return new Date(iso).toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+        function esc(s) {
+            return String(s == null ? '' : s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+        }
+        function setConn(ok, msg) { els.connDot.classList.toggle('is-error', !ok); els.connStatus.textContent = msg; }
+
+        // ===== Auth =====
+        async function init() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) showApp(); else showLogin();
+        }
+        function showLogin() { els.login.hidden = false; els.app.hidden = true; }
+        function showApp() { els.login.hidden = true; els.app.hidden = false; loadAll(); }
+
+        els.loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            els.loginBtn.disabled = true;
+            els.loginError.textContent = '';
+            const { error } = await supabase.auth.signInWithPassword({
+                email: els.email.value.trim(),
+                password: els.password.value
+            });
+            els.loginBtn.disabled = false;
+            if (error) { els.loginError.textContent = error.message; return; }
+            showApp();
+        });
+
+        els.signout.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            location.href = location.pathname; // drop any deep-link param
+        });
+
+        // ===== Data load =====
+        async function loadAll() {
+            els.loading.hidden = false;
+            els.tableScroll.hidden = true;
+            els.empty.hidden = true;
+            els.error.hidden = true;
+            try {
+                const [leads, contacts, notifs] = await Promise.all([
+                    supabase.from('lead_qualifications').select('*').order('created_at', { ascending: false }).limit(500),
+                    supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(500),
+                    supabase.from('notifications').select('*').order('sent_at', { ascending: false }).limit(500)
+                ]);
+                if (leads.error) throw leads.error;
+                if (contacts.error) throw contacts.error;
+                if (notifs.error) throw notifs.error;
+                state.data.leads = leads.data || [];
+                state.data.contacts = contacts.data || [];
+                state.data.notifications = notifs.data || [];
+                $('count_leads').textContent = state.data.leads.length;
+                $('count_contacts').textContent = state.data.contacts.length;
+                $('count_notifications').textContent = state.data.notifications.length;
+                setConn(true, `Loaded · ${new Date().toLocaleTimeString()}`);
+                render();
+                handleDeepLink();
+            } catch (err) {
+                console.error(err);
+                els.error.hidden = false;
+                els.error.textContent = `Couldn't load: ${err.message || err}`;
+                setConn(false, 'Connection failed');
+            } finally {
+                els.loading.hidden = true;
+            }
+        }
+
+        // ===== Render per tab =====
+        const COLUMNS = {
+            leads: ['Received', 'Name', 'Business', 'Bottleneck', 'Timeline', 'Source', 'Status'],
+            contacts: ['Received', 'Name', 'Business', 'Message', 'Source'],
+            notifications: ['Sent', 'Event', 'Topic', 'Status', 'Msg ID']
+        };
+
+        function renderStats() {
+            if (state.tab === 'leads') {
+                const d = state.data.leads, total = d.length;
+                const booked = d.filter(r => r.status === 'booked').length;
+                const submitted = d.filter(r => r.status === 'submitted').length;
+                const last7 = d.filter(r => Date.now() - new Date(r.created_at).getTime() < 6048e5).length;
+                const conv = total ? Math.round(booked / total * 100) : 0;
+                els.stats.innerHTML = `
+                    <div class="stat"><div class="stat__label">Total leads</div><div class="stat__value">${total}</div></div>
+                    <div class="stat"><div class="stat__label">Last 7 days</div><div class="stat__value">${last7}</div></div>
+                    <div class="stat"><div class="stat__label">Booked</div><div class="stat__value stat__value--accent">${booked}</div></div>
+                    <div class="stat"><div class="stat__label">Awaiting</div><div class="stat__value">${submitted}</div></div>
+                    <div class="stat"><div class="stat__label">Booking rate</div><div class="stat__value">${conv}%</div></div>`;
+            } else if (state.tab === 'contacts') {
+                const d = state.data.contacts;
+                const last7 = d.filter(r => Date.now() - new Date(r.created_at).getTime() < 6048e5).length;
+                els.stats.innerHTML = `
+                    <div class="stat"><div class="stat__label">Total messages</div><div class="stat__value">${d.length}</div></div>
+                    <div class="stat"><div class="stat__label">Last 7 days</div><div class="stat__value stat__value--accent">${last7}</div></div>`;
+            } else {
+                const d = state.data.notifications;
+                const sent = d.filter(r => r.status === 'sent').length;
+                const failed = d.filter(r => r.status === 'failed').length;
+                els.stats.innerHTML = `
+                    <div class="stat"><div class="stat__label">Total sent</div><div class="stat__value">${d.length}</div></div>
+                    <div class="stat"><div class="stat__label">Delivered</div><div class="stat__value stat__value--accent">${sent}</div></div>
+                    <div class="stat"><div class="stat__label">Failed</div><div class="stat__value">${failed}</div></div>`;
+            }
+        }
+
+        function currentRows() {
+            const q = state.search.trim().toLowerCase();
+            let rows = state.data[state.tab];
+            if (!q) return rows;
+            return rows.filter(r => {
+                if (state.tab === 'leads') return `${r.full_name} ${r.email} ${r.business_name} ${r.business_description}`.toLowerCase().includes(q);
+                if (state.tab === 'contacts') return `${r.full_name} ${r.email} ${r.business_name} ${r.message}`.toLowerCase().includes(q);
+                return `${r.event_type} ${r.topic} ${r.status}`.toLowerCase().includes(q);
+            });
+        }
+
+        function render() {
+            renderStats();
+            els.thead.innerHTML = `<tr>${COLUMNS[state.tab].map(c => `<th>${c}</th>`).join('')}</tr>`;
+            const rows = currentRows();
+            if (!rows.length) {
+                els.tableScroll.hidden = true;
+                els.empty.hidden = false;
+                els.emptySub.textContent = state.tab === 'leads' ? 'Leads from the qualify funnel appear here.'
+                    : state.tab === 'contacts' ? 'Messages from the contact form appear here.'
+                    : 'Every Telegram notification is logged here.';
+                return;
+            }
+            els.empty.hidden = true;
+            els.tableScroll.hidden = false;
+            els.rows.innerHTML = rows.map(r => rowHtml(r)).join('');
+        }
+
+        function rowHtml(r) {
+            if (state.tab === 'leads') {
+                return `<tr data-id="${esc(r.id)}">
+                    <td>${esc(fmtDate(r.created_at))}<span class="secondary">${esc(fmtFull(r.created_at))}</span></td>
+                    <td>${esc(r.full_name)}<span class="secondary">${esc(r.email)}</span></td>
+                    <td>${esc(r.business_name)}</td>
+                    <td>${esc(lbl('primary_bottleneck', r.primary_bottleneck))}</td>
+                    <td>${esc(lbl('timeline', r.timeline))}</td>
+                    <td>${esc(r.source || '-')}</td>
+                    <td><span class="status status--${esc(r.status)}">${esc(r.status)}</span></td></tr>`;
+            }
+            if (state.tab === 'contacts') {
+                const msg = (r.message || '').slice(0, 60);
+                return `<tr data-id="${esc(r.id)}">
+                    <td>${esc(fmtDate(r.created_at))}<span class="secondary">${esc(fmtFull(r.created_at))}</span></td>
+                    <td>${esc(r.full_name)}<span class="secondary">${esc(r.email)}</span></td>
+                    <td>${esc(r.business_name || '-')}</td>
+                    <td>${esc(msg)}${(r.message || '').length > 60 ? '…' : ''}</td>
+                    <td>${esc(r.source || '-')}</td></tr>`;
+            }
+            return `<tr data-id="${esc(r.id)}">
+                <td>${esc(fmtDate(r.sent_at))}<span class="secondary">${esc(fmtFull(r.sent_at))}</span></td>
+                <td>${esc(lbl('event_type', r.event_type))}</td>
+                <td>${esc(r.topic)}</td>
+                <td><span class="status status--${esc(r.status)}">${esc(r.status)}</span></td>
+                <td class="field-row__value--mono">${esc(r.telegram_message_id || '-')}</td></tr>`;
+        }
+
+        // ===== Drawer =====
+        function openLeadDrawer(r) {
+            const calendly = r.calendly_event_uri ? `<a href="${esc(r.calendly_event_uri)}" target="_blank" rel="noopener">View in Calendly</a>` : '<span style="color:var(--gray)">Not booked</span>';
+            els.drawerBody.innerHTML = `
+                <h2>${esc(r.full_name)}</h2>
+                <div class="subhead">${esc(r.email)} · ${esc(r.id)}</div>
+                <div class="field-row"><div class="field-row__label">Status</div><div class="field-row__value"><span class="status status--${esc(r.status)}">${esc(r.status)}</span></div></div>
+                <div class="field-row"><div class="field-row__label">Business</div><div class="field-row__value">${esc(r.business_name)}</div></div>
+                <div class="field-row"><div class="field-row__label">What they do</div><div class="field-row__value">${esc(r.business_description)}</div></div>
+                <div class="field-row"><div class="field-row__label">Team size</div><div class="field-row__value">${esc(lbl('company_size', r.company_size))}</div></div>
+                <div class="field-row"><div class="field-row__label">#1 bottleneck</div><div class="field-row__value">${esc(lbl('primary_bottleneck', r.primary_bottleneck))}</div></div>
+                <div class="field-row"><div class="field-row__label">Timeline</div><div class="field-row__value">${esc(lbl('timeline', r.timeline))}</div></div>
+                <div class="field-row"><div class="field-row__label">Submitted</div><div class="field-row__value">${esc(fmtFull(r.created_at))}</div></div>
+                <div class="field-row"><div class="field-row__label">Source</div><div class="field-row__value">${esc(r.source || '-')}</div></div>
+                <div class="field-row"><div class="field-row__label">Booked at</div><div class="field-row__value">${esc(fmtFull(r.calendly_booked_at))}</div></div>
+                <div class="field-row"><div class="field-row__label">Calendly</div><div class="field-row__value">${calendly}</div></div>
+                ${r.cancelled_at ? `<div class="field-row"><div class="field-row__label">Cancelled</div><div class="field-row__value">${esc(fmtFull(r.cancelled_at))}</div></div>` : ''}
+                ${r.cancellation_reason ? `<div class="field-row"><div class="field-row__label">Reason</div><div class="field-row__value">${esc(r.cancellation_reason)}</div></div>` : ''}
+                <div class="field-row"><div class="field-row__label">Email</div><div class="field-row__value"><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></div></div>`;
+            openDrawer();
+        }
+        function openContactDrawer(r) {
+            els.drawerBody.innerHTML = `
+                <h2>${esc(r.full_name)}</h2>
+                <div class="subhead">${esc(r.email)} · ${esc(r.id)}</div>
+                <div class="field-row"><div class="field-row__label">Business</div><div class="field-row__value">${esc(r.business_name || '-')}</div></div>
+                <div class="field-row"><div class="field-row__label">Source</div><div class="field-row__value">${esc(r.source || '-')}</div></div>
+                <div class="field-row"><div class="field-row__label">Received</div><div class="field-row__value">${esc(fmtFull(r.created_at))}</div></div>
+                <div class="field-row"><div class="field-row__label">Message</div><div class="field-row__value field-row__value--msg">${esc(r.message)}</div></div>
+                <div class="field-row"><div class="field-row__label">Reply</div><div class="field-row__value"><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></div></div>`;
+            openDrawer();
+        }
+        function openDrawer() {
+            els.drawerBackdrop.classList.add('is-open');
+            els.drawer.classList.add('is-open');
+            els.drawer.setAttribute('aria-hidden', 'false');
+        }
+        function closeDrawer() {
+            els.drawerBackdrop.classList.remove('is-open');
+            els.drawer.classList.remove('is-open');
+            els.drawer.setAttribute('aria-hidden', 'true');
+        }
+
+        // ===== Deep-link (?lead=<id> or ?contact=<id>) =====
+        function handleDeepLink() {
+            const params = new URLSearchParams(location.search);
+            const leadId = params.get('lead');
+            const contactId = params.get('contact');
+            if (leadId) {
+                switchTab('leads');
+                const row = state.data.leads.find(r => r.id === leadId);
+                if (row) { openLeadDrawer(row); highlightRow(leadId); }
+            } else if (contactId) {
+                switchTab('contacts');
+                const row = state.data.contacts.find(r => r.id === contactId);
+                if (row) { openContactDrawer(row); highlightRow(contactId); }
+            }
+        }
+        function highlightRow(id) {
+            requestAnimationFrame(() => {
+                const tr = els.rows.querySelector(`tr[data-id="${CSS.escape(id)}"]`);
+                if (tr) { tr.classList.add('is-highlight'); tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            });
+        }
+
+        // ===== Tabs / events =====
+        function switchTab(tab) {
+            state.tab = tab;
+            state.search = '';
+            els.searchInput.value = '';
+            els.tabs.querySelectorAll('.tab').forEach(t => t.classList.toggle('is-active', t.dataset.tab === tab));
+            render();
+        }
+        els.tabs.addEventListener('click', (e) => {
+            const btn = e.target.closest('.tab');
+            if (btn) switchTab(btn.dataset.tab);
+        });
+        els.rows.addEventListener('click', (e) => {
+            const tr = e.target.closest('tr[data-id]');
+            if (!tr) return;
+            const id = tr.dataset.id;
+            if (state.tab === 'leads') { const r = state.data.leads.find(x => x.id === id); if (r) openLeadDrawer(r); }
+            else if (state.tab === 'contacts') { const r = state.data.contacts.find(x => x.id === id); if (r) openContactDrawer(r); }
+        });
+        let searchDebounce;
+        els.searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchDebounce);
+            searchDebounce = setTimeout(() => { state.search = e.target.value; render(); }, 150);
+        });
+        els.refresh.addEventListener('click', loadAll);
+        els.drawerClose.addEventListener('click', closeDrawer);
+        els.drawerBackdrop.addEventListener('click', closeDrawer);
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && els.drawer.classList.contains('is-open')) closeDrawer(); });
+
+        init();
+    </script>
+</body>
+</html>
