@@ -170,8 +170,13 @@ module.exports = async function handler(req, res) {
                 .eq('id', result.id)
                 .single();
             if (row) {
-                const msg = eventType === 'invitee.created' ? bookedMessage(row) : cancelledMessage(row);
-                await sendTelegram(msg, { topic: 'leads', deepLink: { leadId: row.id } });
+                const isBooked = eventType === 'invitee.created';
+                const msg = isBooked ? bookedMessage(row) : cancelledMessage(row);
+                await sendTelegram(msg, {
+                    topic: 'leads',
+                    event: isBooked ? 'booked' : 'cancelled',
+                    deepLink: { leadId: row.id }
+                });
             }
         } catch (err) {
             console.error('Telegram alert failed (non-fatal)', err && err.message ? err.message : err);
