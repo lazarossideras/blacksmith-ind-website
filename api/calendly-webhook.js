@@ -10,6 +10,7 @@
 
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
+const { sendTelegram, bookedMessage, cancelledMessage } = require('./_lib/telegram');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -159,6 +160,21 @@ module.exports = async function handler(req, res) {
             // Still return 200 — the booking is valid; we just don't have a qualification row.
             // Could be a direct Calendly booking that bypassed the funnel.
             return res.status(200).json({ ok: true, matched: false, event: eventType });
+        }
+
+        // Fire Telegram alert inline (fire-and-forget - any failure is logged, never blocks the 200).
+        try {
+            const { data: row } = await supabase
+                .from('lead_qualifications')
+                .select('id, full_name, email, business_name, calendly_booked_at, cancelled_at, cancellation_reason')
+                .eq('id', result.id)
+                .single();
+            if (row) {
+                const msg = eventType === 'invitee.created' ? bookedMessage(row) : cancelledMessage(row);
+                await sendTelegram(msg, { topic: 'leads', deepLink: { leadId: row.id } });
+            }
+        } catch (err) {
+            console.error('Telegram alert failed (non-fatal)', err && err.message ? err.message : err);
         }
 
         return res.status(200).json({
