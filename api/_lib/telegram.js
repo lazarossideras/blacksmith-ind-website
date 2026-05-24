@@ -22,7 +22,8 @@
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_GROUP_ID = process.env.TELEGRAM_GROUP_ID;
-const DASHBOARD_URL = process.env.DASHBOARD_URL || 'https://admin.blacksmith-ind.com';
+// Canonical dashboard URL - hardcoded (public, stable) so deep-links never drift.
+const DASHBOARD_URL = 'https://www.blacksmith-ind.com/admin';
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
