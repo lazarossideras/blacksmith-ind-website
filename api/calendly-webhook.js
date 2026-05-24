@@ -14,7 +14,9 @@ const { sendTelegram, bookedMessage, cancelledMessage } = require('./_lib/telegr
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const CALENDLY_WEBHOOK_SIGNING_KEY = process.env.CALENDLY_WEBHOOK_SIGNING_KEY;
+// .trim() guards against a stray trailing newline in the env var, which would
+// otherwise make the HMAC key differ from what Calendly signs with (→ 403).
+const CALENDLY_WEBHOOK_SIGNING_KEY = (process.env.CALENDLY_WEBHOOK_SIGNING_KEY || '').trim();
 
 async function readRawBody(req) {
     const chunks = [];
